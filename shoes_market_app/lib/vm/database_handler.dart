@@ -23,9 +23,10 @@ class DatabaseHandler{
             create table product
             (
               id integer primary key autoincrement,
+              size integer primary key,
+              name text,
               color text,
-              price int,
-              size text,
+              price integer,
               image blob,
               brand text
             )
@@ -36,10 +37,10 @@ class DatabaseHandler{
             create table transport
             (
               id integer primary key autoincrement,
-              shop_id int,
-              product_id int,
+              status primary key text
+              shop_id integer,
+              product_id integer,
               date text,
-              status text
             )
         """
         );
@@ -48,7 +49,7 @@ class DatabaseHandler{
             create table customer
             (
               seq integer primary key autoincrement,
-              id text,
+              id text primary key,
               name text,
               phone text,
               password text
@@ -60,14 +61,14 @@ class DatabaseHandler{
             create table purchase
             (
               id integer primary key autoincrement,
-              status text,
-              shop_id int,
-              customer_seq int,
-              product_id int,
-              product_color text,
+              status text primary key,
+              shop_id integer,
+              customer_seq integer,
+              product_id integer,
+              product_size integer,
               purchasedate text,
-              purchaseprice int,
-              quantity int
+              purchaseprice integer,
+              quantity integer
             )
         """
         );
