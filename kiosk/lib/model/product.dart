@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 class Product{
-  int? id;
+  String? id;
   int size;
   String name;
   String color;

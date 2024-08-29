@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kiosk/view/home.dart';
+import 'package:get/get.dart';
+import 'package:kiosk/view/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,14 +11,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
 
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Home(),
+      home: const Login(),
     );
   }
 }
