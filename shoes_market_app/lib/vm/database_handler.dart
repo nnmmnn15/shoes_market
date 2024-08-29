@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:shoes_market_app/model/product.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHandler{
@@ -22,13 +23,14 @@ class DatabaseHandler{
         """
             create table product
             (
-              id integer primary key autoincrement,
-              size integer primary key,
+              id text,
+              size integer,
               name text,
               color text,
               price integer,
               image blob,
-              brand text
+              brand text,
+              primary key(id, size)
             )
         """
         );
@@ -36,11 +38,12 @@ class DatabaseHandler{
         """
             create table transport
             (
-              id integer primary key autoincrement,
-              status primary key text
+              id integer,
+              status text,
               shop_id integer,
-              product_id integer,
+              product_id text,
               date text,
+              primary key(id, status)
             )
         """
         );
@@ -49,7 +52,7 @@ class DatabaseHandler{
             create table customer
             (
               seq integer primary key autoincrement,
-              id text primary key,
+              id text,
               name text,
               phone text,
               password text
@@ -60,21 +63,31 @@ class DatabaseHandler{
         """
             create table purchase
             (
-              id integer primary key autoincrement,
-              status text primary key,
+              id integer,
+              status text,
               shop_id integer,
               customer_seq integer,
               product_id integer,
               product_size integer,
               purchasedate text,
               purchaseprice integer,
-              quantity integer
+              quantity integer,
+              primary key(id, status)
             )
         """
         );
       },
       version: 1,
     );
+  }
+  
+Future<List<Product>> queryAddress() async{
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = 
+      await db.rawQuery(
+        'select * from transport'
+      );
+    return queryResult.map((e) => Product.fromMap(e) ,).toList();
   }
 
 
