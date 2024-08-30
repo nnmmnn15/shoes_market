@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shose_web/model/sales_by_type.dart';
 import 'package:shose_web/vm/sales_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -14,6 +15,8 @@ class _SalesChartState extends State<SalesChart> {
   // Property
   late List<String> items;
   late String dropdownValue;
+  late TextEditingController startDateController;
+  late TextEditingController endDateController;
 
   late TooltipBehavior tooltipBehavior;
 
@@ -26,6 +29,8 @@ class _SalesChartState extends State<SalesChart> {
     dropdownValue = items[0];
     handler = SalesHandler();
     tooltipBehavior = TooltipBehavior();
+    startDateController = TextEditingController();
+    endDateController = TextEditingController();
   }
 
   @override
@@ -35,8 +40,55 @@ class _SalesChartState extends State<SalesChart> {
       body: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               dropdownBtn(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('날짜를 입력해주세요'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          controller: startDateController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(8),
+                          ],
+                          decoration: const InputDecoration(labelText: 'YYYYMMDD'),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: Text(
+                          '~',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: TextFormField(
+                          controller: endDateController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(8),
+                          ],
+                          decoration: const InputDecoration(labelText: 'YYYYMMDD'),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          //
+                        },
+                        icon: Icon(Icons.search),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
           dropdownValue == items[0]
@@ -72,10 +124,13 @@ class _SalesChartState extends State<SalesChart> {
         items: items.map((String items) {
           return DropdownMenuItem(
             value: items,
-            child: Text(
-              items,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                items,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
               ),
             ),
           );
