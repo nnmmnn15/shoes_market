@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:shose_web/model/purchase.dart';
+import 'package:shose_web/model/sales.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHandler {
@@ -75,6 +76,7 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery('select * from purchase');
+    print(queryResult);
     return queryResult
         .map(
           (e) => Purchase.fromMap(e),
@@ -82,9 +84,8 @@ class DatabaseHandler {
         .toList();
   }
 
-  Future<List> queryPurchasesales() async {
+  Future<List<Sales>> queryPurchasesales() async {
     final Database db = await initializeDB();
-    List sales = [];
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
           '''select shop.name as 지점, sum(purchase.purchaseprice * purchase.quantity) as 매출
@@ -94,12 +95,8 @@ class DatabaseHandler {
           group by shop.id;
           '''
           );
-    queryResult.map(
-      (e) {
-      Map<String, dynamic> res= e;
-      sales.add(res['지점']);
-      sales.add(res['매출']);
-    },).toList();
-    return sales;
+    print(queryResult);
+    
+    return queryResult.map((e) => Sales.fromMap(e)).toList();
   }
 }

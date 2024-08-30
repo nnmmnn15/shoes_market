@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shose_web/model/purchase.dart';
+import 'package:shose_web/model/sales.dart';
 import 'package:shose_web/view/sales_chart.dart';
 import 'package:shose_web/view/sales_grape.dart';
 import 'package:shose_web/vm/database_handler.dart';
@@ -16,7 +16,7 @@ class CurrentSituation extends StatefulWidget {
 class _CurrentSituationState extends State<CurrentSituation> {
   //Property
   late DatabaseHandler handler;
-  late List<Purchase> data;
+  late List<Sales> data;
   late TooltipBehavior tooltipBehavior;
 
   @override
@@ -28,7 +28,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
     addData();
   }
 
-  addData()async{
+  addData() async {
     data = await handler.queryPurchasesales();
   }
 
@@ -180,7 +180,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                     width: 1000,
                     height: 300,
                     child: FutureBuilder(
-                      future: handler.queryPurchase(),
+                      future: handler.queryPurchasesales(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Card(
@@ -188,16 +188,27 @@ class _CurrentSituationState extends State<CurrentSituation> {
                               title: const ChartTitle(),
                               tooltipBehavior: tooltipBehavior,
                               series: [
-                                LineSeries<Purchase, int>(
+                                ColumnSeries<Sales, String>(
                                   color: Theme.of(context).colorScheme.primary,
-                                  name: 'pur',
+                                  name: 'Developers',
                                   dataSource: data,
-                                  xValueMapper: (Purchase pur, _)=> pur.shopId,
-                                  yValueMapper: (Purchase pur, _)=> pur.purchasePrice,
+                                  xValueMapper: (Sales pur, _) => pur.name,
+                                  yValueMapper: (Sales pur, _) => pur.sale,
+                                  dataLabelSettings: const DataLabelSettings(
+                                      isVisible: true), //chart위에 숫자표시 신뢰도 상승
+                                  enableTooltip: true,
+                                  width: 0.05,
                                 ),
                               ],
+                              primaryXAxis: const CategoryAxis(
+                                title: AxisTitle(text: '점포'),
+                              ),
+                              //y축 타이틀 (ylabel)
+                              primaryYAxis: const CategoryAxis(
+                                title: AxisTitle(text: '매출'),
+                              ),
                             ),
-                          );  //그래프
+                          ); //그래프
                         } else {
                           return const Center(
                             child: CircularProgressIndicator(),
