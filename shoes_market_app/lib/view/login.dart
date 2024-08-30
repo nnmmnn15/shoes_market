@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:shoes_market_app/model/purchase.dart';
 import 'package:shoes_market_app/view/register.dart';
 import 'package:shoes_market_app/view/shoeslist.dart';
+import 'package:shoes_market_app/view/tabbar.dart';
 
 import '../vm/database_handler.dart';
 import 'order.dart';
@@ -136,7 +137,7 @@ class _LoginState extends State<Login> {
             onPressed: () {
               Get.back();
               Get.to(
-              () => Shoeslist(),
+              () => const Tabbar(),
               );
             },
             child: const Text('확인'),
