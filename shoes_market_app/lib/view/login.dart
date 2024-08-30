@@ -27,6 +27,19 @@ class _LoginState extends State<Login> {
     handler = DatabaseHandler();
     idController = TextEditingController();
     passwordController = TextEditingController();
+    initStorage();
+  }
+    initStorage(){
+    box.write('p_userId',"");
+    box.write('p_password', "");
+  }
+  @override
+  void dispose() {    // 앱 종료했때 정의
+    disposeStorage();
+    super.dispose();
+  }
+  disposeStorage(){
+    box.erase();    ///////////////
   }
 
   @override
@@ -165,5 +178,10 @@ Future<String> getName() async{
       backgroundColor: Theme.of(context).colorScheme.error,
       colorText: Theme.of(context).colorScheme.onError,
     );
+  }
+  
+  saveStorage(){
+    box.write('p_userId', idController.text.trim());
+    box.write('p_password', passwordController.text.trim());
   }
 }
