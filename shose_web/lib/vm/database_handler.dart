@@ -76,7 +76,6 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery('select * from purchase');
-    print(queryResult);
     return queryResult
         .map(
           (e) => Purchase.fromMap(e),
@@ -95,7 +94,6 @@ class DatabaseHandler {
           group by shop.id;
           '''
           );
-    print(queryResult);
     
     return queryResult.map((e) => Sales.fromMap(e)).toList();
   }
