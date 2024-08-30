@@ -10,6 +10,12 @@ class Orderstatus extends StatefulWidget {
 class _OrderstatusState extends State<Orderstatus> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset('images/abcd.png'),
+        backgroundColor: Color.fromARGB(255, 242, 179, 6),
+      ),
+      
+    );
   }
 }
