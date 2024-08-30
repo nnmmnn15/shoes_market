@@ -233,7 +233,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                                 title: AxisTitle(text: '점포'),
                               ),
                               //y축 타이틀 (ylabel)
-                              primaryYAxis: const CategoryAxis(
+                              primaryYAxis: const NumericAxis(
                                 title: AxisTitle(text: '매출'),
                               ),
                             ),

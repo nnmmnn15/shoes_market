@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shose_web/model/sales_by_type.dart';
+import 'package:shose_web/vm/sales_handler.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SalesChart extends StatefulWidget {
   const SalesChart({super.key});
@@ -8,8 +11,216 @@ class SalesChart extends StatefulWidget {
 }
 
 class _SalesChartState extends State<SalesChart> {
+  // Property
+  late List<String> items;
+  late String dropdownValue;
+
+  late TooltipBehavior tooltipBehavior;
+
+  late SalesHandler handler;
+
+  @override
+  void initState() {
+    super.initState();
+    items = ['매출', '판매량'];
+    dropdownValue = items[0];
+    handler = SalesHandler();
+    tooltipBehavior = TooltipBehavior();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              dropdownBtn(),
+            ],
+          ),
+          dropdownValue == items[0]
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    saleByDate(),
+                    saleByBrand(),
+                  ],
+                )
+              : Flexible(child: salesAllData())
+        ],
+      ),
+    );
   }
-}
+
+  // --- Function ---
+  dropdownBtn() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.black38),
+      ),
+      width: 150,
+      child: DropdownButton(
+        underline: const SizedBox(),
+        focusColor: const Color.fromARGB(0, 255, 193, 7),
+        dropdownColor: Theme.of(context).colorScheme.primaryContainer,
+        iconEnabledColor: Theme.of(context).colorScheme.secondary,
+        value: dropdownValue, // 현재 값
+        isExpanded: true,
+        icon: const Icon(Icons.keyboard_arrow_down),
+        items: items.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(
+              items,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+          );
+        }).toList(),
+        onChanged: (value) {
+          dropdownValue = value!;
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  saleByDate() {
+    return SizedBox(
+      width: 700,
+      height: 600,
+      child: FutureBuilder(
+        future: handler.queryPurchasesalesByDate(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<SalesByType> data = snapshot.data!;
+            return SfCartesianChart(
+              title: const ChartTitle(
+                text: "날짜별",
+              ),
+              tooltipBehavior: tooltipBehavior, // 차트 선택시 상세 데이터 보여줌
+              series: [
+                LineSeries<SalesByType, String>(
+                  // int 는 형식이므로 맞춰줘야함 (나중에 index로 대체)
+                  color: Theme.of(context).colorScheme.primary,
+                  name: 'date',
+                  dataSource: data,
+                  xValueMapper: (SalesByType sale, _) => sale.type,
+                  yValueMapper: (SalesByType sale, _) => sale.sale,
+                  dataLabelSettings:
+                      const DataLabelSettings(isVisible: true), // 차트 상단의 수치 표기
+                  enableTooltip: true,
+                ),
+              ],
+              // x축 타이틀 (xlabel)
+              primaryXAxis: const CategoryAxis(
+                title: AxisTitle(text: '일자'),
+              ),
+              // y축 타이틀 (ylabel)
+              primaryYAxis: const NumericAxis(title: AxisTitle(text: '매출')),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  saleByBrand() {
+    return SizedBox(
+      width: 700,
+      height: 600,
+      child: FutureBuilder(
+        future: handler.queryPurchasesalesByBrand(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<SalesByType> data = snapshot.data!;
+            return SfCartesianChart(
+              title: const ChartTitle(
+                text: "브랜드",
+              ),
+              tooltipBehavior: tooltipBehavior,
+              series: [
+                ColumnSeries<SalesByType, String>(
+                  color: Theme.of(context).colorScheme.primary,
+                  name: 'brand',
+                  dataSource: data,
+                  xValueMapper: (SalesByType sale, _) => sale.type,
+                  yValueMapper: (SalesByType sale, _) => sale.sale,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  enableTooltip: true,
+                ),
+              ],
+              // x축 타이틀 (xlabel)
+              primaryXAxis: const CategoryAxis(
+                title: AxisTitle(text: '브랜드'),
+              ),
+              // y축 타이틀 (ylabel)
+              primaryYAxis: const NumericAxis(title: AxisTitle(text: '매출')),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  salesAllData() {
+    return FutureBuilder(
+      future: handler.queryPurchasesalesByDateAll(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 600,
+                child: buildTableRow(['일자', '판매수량', '판매액']),
+              ),
+              SizedBox(
+                width: 600,
+                height: 500,
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return buildTableRow([
+                      snapshot.data![index].date,
+                      snapshot.data![index].quantity,
+                      snapshot.data![index].sale
+                    ]);
+                  },
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  buildTableRow(List data) {
+    return Row(
+        children: data.map(
+      (e) {
+        return Container(
+          width: 200,
+          decoration: BoxDecoration(border: Border.all()),
+          child: Text(e.toString()),
+        );
+      },
+    ).toList());
+  }
+} // End
