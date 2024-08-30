@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shose_web/model/purchase.dart';
+import 'package:shose_web/view/sales_chart.dart';
+import 'package:shose_web/view/sales_grape.dart';
+import 'package:shose_web/vm/database_handler.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CurrentSituation extends StatefulWidget {
   const CurrentSituation({super.key});
@@ -8,15 +14,203 @@ class CurrentSituation extends StatefulWidget {
 }
 
 class _CurrentSituationState extends State<CurrentSituation> {
+  //Property
+  late DatabaseHandler handler;
+  late List<Purchase> data;
+  late TooltipBehavior tooltipBehavior;
+
+  @override
+  void initState() {
+    super.initState();
+    handler = DatabaseHandler();
+    data = [];
+    tooltipBehavior = TooltipBehavior();
+    addData();
+  }
+
+  addData()async{
+    data = await handler.queryPurchasesales();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: const Text(
-          'ABCD 마켓',
-          style: TextStyle(
-            backgroundColor: Colors.black,
-          ),),
+          'ABCD Market',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 750,
+                height: 155,
+                child: Card(
+                  child: Column(
+                    children: [
+                      Text(
+                        '매출 현황',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Text(
+                            '판매수량',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            '67켤레',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '이번 달 매출',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '13,684,389원',
+                            style: TextStyle(fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 500,
+                    height: 300,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '전체 판매량 보기',
+                              style: TextStyle(
+                                fontSize: 40,
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  Get.to(() => const SalesGrape());
+                                },
+                                icon: Icon(Icons.arrow_forward)),
+                          ],
+                        ),
+                        Text(
+                          '베스트 브랜드',
+                          style: TextStyle(fontSize: 30),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 1000,
+                    height: 300,
+                    child: FutureBuilder(
+                      future: handler.queryPurchase(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Card(
+                            child: Column(
+                              children: [
+                                // Text(),
+                                // Text(),
+                                // Image.memory(),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 500,
+                    height: 300,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '전체 매출 보기',
+                              style: TextStyle(
+                                fontSize: 40,
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  Get.to(() => SalesChart()); //차트
+                                },
+                                icon: Icon(Icons.arrow_forward)),
+                          ],
+                        ),
+                        Text(
+                          '매장 별 판매수량',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 1000,
+                    height: 300,
+                    child: FutureBuilder(
+                      future: handler.queryPurchase(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Card(
+                            child: SfCartesianChart(
+                              title: const ChartTitle(),
+                              tooltipBehavior: tooltipBehavior,
+                              series: [
+                                LineSeries<Purchase, int>(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  name: 'pur',
+                                  dataSource: data,
+                                  xValueMapper: (Purchase pur, _)=> pur.shopId,
+                                  yValueMapper: (Purchase pur, _)=> pur.purchasePrice,
+                                ),
+                              ],
+                            ),
+                          );  //그래프
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

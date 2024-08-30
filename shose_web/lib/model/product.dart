@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 class Product{
-  int? id;
+  String id;
   int size;
   String name;
   String color;
@@ -11,7 +11,7 @@ class Product{
 
   Product(
     {
-      this.id,
+      required this.id,
       required this.size,
       required this.name,
       required this.color,
