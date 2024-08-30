@@ -49,45 +49,56 @@ class _CurrentSituationState extends State<CurrentSituation> {
               SizedBox(
                 width: 750,
                 height: 155,
-                child: Card(
-                  child: Column(
-                    children: [
-                      Text(
-                        '매출 현황',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Divider(),
-                      Row(
-                        children: [
-                          Text(
-                            '판매수량',
-                            style: TextStyle(
-                              fontSize: 20,
+                child: FutureBuilder(
+                  future: handler.queryPurchaseall(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Card(
+                        child: Column(
+                          children: [
+                            Text(
+                              '매출 현황',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '67켤레',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '이번 달 매출',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '13,684,389원',
-                            style: TextStyle(fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                            Divider(),
+                            Row(
+                              children: [
+                                Text(
+                                  '판매수량',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                Text(
+                                  '${snapshot.data![0].quantityall.toString()}켤례',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '이번 달 매출',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  '${snapshot.data![0].sale.toString()}원',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
                 ),
               ),
               Row(
@@ -124,15 +135,33 @@ class _CurrentSituationState extends State<CurrentSituation> {
                     width: 1000,
                     height: 300,
                     child: FutureBuilder(
-                      future: handler.queryPurchase(),
+                      future: handler.queryPurchasebest(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Card(
-                            child: Column(
+                            child: Row(
                               children: [
-                                // Text(),
-                                // Text(),
-                                // Image.memory(),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${snapshot.data![0].name} (${snapshot.data![0].color})',
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '${snapshot.data![0].price.toString()}원',
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Image.memory(
+                                  snapshot.data![0].image,
+                                  width: 200,
+                                ),
                               ],
                             ),
                           );
