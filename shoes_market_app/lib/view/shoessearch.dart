@@ -19,29 +19,29 @@ class _ShoessearchState extends State<Shoessearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 
-      Center(
-        child: FutureBuilder(
-          future: handler.queryAddress(), 
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Text(snapshot.data![index].name),
-                  );
-                },
-              );
-            }else{
-              return const Center(
-                child:  CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
+      // body: 
+      // Center(
+      //   child: FutureBuilder(
+      //     future: handler.queryAddress(), 
+      //     builder: (context, snapshot) {
+      //       if(snapshot.hasData){
+      //         return ListView.builder(
+      //           itemCount: snapshot.data!.length,
+      //           itemBuilder: (context, index) {
+      //             return Card(
+      //               child: Text(snapshot.data![index].name),
+      //             );
+      //           },
+      //         );
+      //       }else{
+      //         return const Center(
+      //           child:  CircularProgressIndicator(),
+      //         );
+      //       }
+      //     },
+      //   ),
         
-      ),
+      // ),
     );
   }
 }

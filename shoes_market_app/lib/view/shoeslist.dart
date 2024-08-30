@@ -10,6 +10,10 @@ class Shoeslist extends StatefulWidget {
 class _ShoeslistState extends State<Shoeslist> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('shoes list'),
+      ),
+    );
   }
 }

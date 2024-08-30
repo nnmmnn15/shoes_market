@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:shoes_market_app/model/customer.dart';
 import 'package:shoes_market_app/model/product.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -81,14 +82,79 @@ class DatabaseHandler{
     );
   }
   
-Future<List<Product>> queryAddress() async{
+
+
+
+//-------------회원가입 정보 DB에 저장--------------
+Future<int> joinCustomer(Customer customer)async{  
+    int result = 0;
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = 
-      await db.rawQuery(
-        'select * from transport'
-      );
-    return queryResult.map((e) => Product.fromMap(e) ,).toList();
+    result = await db.rawInsert(
+      """
+      insert into customer(id, password, name, phone)
+      values (?,?,?,?)
+      """,
+      [customer.id,
+        customer.password,
+        customer.name,
+        customer.phone,]
+    );
+    return result;
   }
+//-------------회원가입시 아이디체크--------------
+Future<List<dynamic>> idCheck(String checkId) async{   
+  final Database db = await initializeDB();
+  int idCheck = 0;
+  dynamic id = '';
+  final List<Map<String,Object?>> queryResult = await db.rawQuery(
+    """
+    select count(*) id from customer where id = '$checkId'
+    """
+    );
+  idCheck = int.parse(queryResult[0]['id'].toString());
+  // queryResult[0]['id'];
+  queryResult.map(
+      (e) {
+        Map<String, dynamic> res = e;
+        // idCheck = res['id'];
+        id = res['id'];
+      },
+    ).toList();
+  return [idCheck, id];
+  }
+
+//-------------로그인--------------
+  Future<List<dynamic>> checkCustomer(String id, String pw) async {  
+    final Database db = await initializeDB();
+    int idCheck = 0;
+    dynamic idSeq = 0;
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        'select seq, count(id) as id from customer where id = ? and password = ?',
+        [id, pw]);
+    queryResult.map(
+      (e) {
+        Map<String, dynamic> res = e;
+        idCheck = res['id'];
+        idSeq = res['seq'];
+      },
+    ).toList();
+    return [idCheck, idSeq];
+  }
+
+//-------------로그인자 이름불러오기-------------
+Future<String> getCustomerName(String id, String pw) async { // 로그인: 주어진 ID와 비밀번호로 고객 이름을 확인
+  final Database db = await initializeDB(); // 데이터베이스 연결 초기화.
+  // SQL 쿼리를 실행하여 주어진 ID와 비밀번호로 이름 가져옴
+  final List<Map<String, Object?>> queryResult = await db.rawQuery(
+    'SELECT name FROM customer WHERE id = ? AND password = ?',
+    [id, pw]);
+  if (queryResult.isNotEmpty) { // 쿼리 결과가 비어 있지 않으면 이름 반환
+    final Map<String, dynamic> row = queryResult.first;
+    return row['name'] as String;
+  } else {
+    return 'empty'; // 고객을 찾을 수 없으면 null 반환
+  }
+}
 
 
 }

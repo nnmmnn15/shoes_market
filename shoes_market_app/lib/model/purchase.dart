@@ -3,7 +3,6 @@ class Purchase{
   String status;
   int shopId;
   int customerSeq;
-  String customerId;
   String productId;
   int productSize;
   String purchaseDate;
@@ -15,7 +14,6 @@ class Purchase{
     required this.status,
     required this.shopId,
     required this.customerSeq,
-    required this.customerId,
     required this.productId,
     required this.productSize,
     required this.purchaseDate,
@@ -28,7 +26,6 @@ class Purchase{
     status = res['status'],
     shopId = res['shopId'],
     customerSeq = res['customerSeq'],
-    customerId = res['customerId'],
     productId = res['productId'],
     productSize = res['productSize'],
     purchaseDate = res['purchaseDate'],

@@ -19,5 +19,5 @@ class Customer{
     id = res['id'],
     name = res['name'],
     phone = res['phone'],
-    password = res['phone'];
+    password = res['password'];
 }
