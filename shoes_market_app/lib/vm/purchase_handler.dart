@@ -1,8 +1,8 @@
 import 'package:path/path.dart';
-import 'package:shoes_market_app/model/product.dart';
+import 'package:shoes_market_app/model/purchase.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseHandler{
+class PurchaseHandler{
   Future<Database> initializeDB() async{
     String path = await getDatabasesPath();
     return openDatabase(
@@ -80,31 +80,47 @@ class DatabaseHandler{
       version: 1,
     );
   }
-  
-Future<List<Product>> queryProduct() async{
-  final Database db = await initializeDB();
-  final List<Map<String, Object?>> queryResult = 
-    await db.rawQuery(
-        """
-        select * from product 
-        """
+
+  Future<int> insertPurchase((String, String, int, String, int, int) temp) async {
+    // temp(product_id, shopname, size, purchasedate, purchaseprice, quantity
+    int result = 0;
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryshopResult = await db.rawQuery(
+      '''
+          select *
+          from shop
+          where name = ?
+      ''', [
+        temp.$2
+        ]);
+    Purchase purchaseData = Purchase(
+      id: queryshopResult[0]['id'].toString()+ DateTime.now().toString(), 
+      status: '미수령', 
+      shopId: int.parse(queryshopResult[0]['id'].toString()), 
+      customerSeq: 1,  // 임시
+      productId: temp.$1, 
+      productSize: temp.$3, 
+      purchaseDate: temp.$4, 
+      purchasePrice: temp.$5, 
+      quantity: temp.$6
     );
-  return queryResult.map((e) => Product.fromMap(e) ,).toList();
+    result = await db.rawInsert(
+      """
+        insert into purchase
+        values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      """,
+      [
+        purchaseData.id,
+        purchaseData.status,
+        purchaseData.shopId,
+        purchaseData.customerSeq,
+        purchaseData.productId,
+        purchaseData.productSize,
+        purchaseData.purchaseDate,
+        purchaseData.purchasePrice,
+        purchaseData.quantity,
+      ]
+    );
+    return result;
   }
-
-Future<List<Product>> searchProduct(String query) async{
-  if(query.trim().isEmpty){
-    return[];
-  }
-  final Database db = await initializeDB();
-  final List<Map<String, Object?>> queryResult = 
-      await db.rawQuery(
-        """
-            select * from product where name like '%$query%'
-        """
-      );
-    return queryResult.map((e) => Product.fromMap(e) ,).toList();
-  }
-
-
 }

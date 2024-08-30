@@ -1,15 +1,14 @@
 import 'package:path/path.dart';
-import 'package:shoes_market_app/model/product.dart';
+import 'package:shoes_market_app/model/shop.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseHandler{
-  Future<Database> initializeDB() async{
+class ShopHandler {
+  Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
       join(path, 'abcd.db'),
-      onCreate: (db, version) async{
-        await db.execute(
-        """
+      onCreate: (db, version) async {
+        await db.execute("""
             create table shop
             (
               id integer primary key autoincrement,
@@ -17,10 +16,8 @@ class DatabaseHandler{
               location text,
               phone text
             )
-        """
-        );
-        await db.execute(
-        """
+        """);
+        await db.execute("""
             create table product
             (
               id text,
@@ -32,10 +29,8 @@ class DatabaseHandler{
               brand text,
               primary key(id, size)
             )
-        """
-        );
-        await db.execute(
-        """
+        """);
+        await db.execute("""
             create table transport
             (
               id integer,
@@ -45,10 +40,8 @@ class DatabaseHandler{
               date text,
               primary key(id, status)
             )
-        """
-        );
-        await db.execute(
-        """
+        """);
+        await db.execute("""
             create table customer
             (
               seq integer primary key autoincrement,
@@ -57,10 +50,8 @@ class DatabaseHandler{
               phone text,
               password text
             )
-        """
-        );
-        await db.execute(
-        """
+        """);
+        await db.execute("""
             create table purchase
             (
               id text,
@@ -74,37 +65,23 @@ class DatabaseHandler{
               quantity integer,
               primary key(id, status)
             )
-        """
-        );
+        """);
       },
       version: 1,
     );
   }
-  
-Future<List<Product>> queryProduct() async{
-  final Database db = await initializeDB();
-  final List<Map<String, Object?>> queryResult = 
-    await db.rawQuery(
-        """
-        select * from product 
-        """
+
+  Future<List<dynamic>> queryShop() async {
+    final Database db = await initializeDB();
+    List<Map<String, Object?>> result = [];
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+      """
+        select * from shop
+      """
     );
-  return queryResult.map((e) => Product.fromMap(e) ,).toList();
+    for(int i = 0; i < queryResult.length; i++){
+      result.add(queryResult[i]);
+    }
+    return result;
   }
-
-Future<List<Product>> searchProduct(String query) async{
-  if(query.trim().isEmpty){
-    return[];
-  }
-  final Database db = await initializeDB();
-  final List<Map<String, Object?>> queryResult = 
-      await db.rawQuery(
-        """
-            select * from product where name like '%$query%'
-        """
-      );
-    return queryResult.map((e) => Product.fromMap(e) ,).toList();
-  }
-
-
 }

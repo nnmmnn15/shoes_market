@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^1.1.2
   get_storage: ^2.1.1
   syncfusion_flutter_charts: ^26.2.11
+  tab_indicator_styler: ^2.0.0
 
 dev_dependencies:
   flutter_test:
