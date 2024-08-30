@@ -1,3 +1,5 @@
+import 'package:kiosk/model/purchase.dart';
+import 'package:kiosk/model/receive_data.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -88,12 +90,13 @@ class DatabaseHandler {
     return [idCheck, idSeq];
   }
 
-  Future<int> checkRecive(int seq, String recive) async {
+  // 로그인
+  Future<int> checkRecive(int seq, String receive) async {
     int receiveCheck = 0; // 여부 확인
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
         'select count(id) as checkreceive from purchase where customer_seq = ? and id = ?',
-        [seq, recive]);
+        [seq, receive]);
 
     queryResult.map(
       (e) {
@@ -102,5 +105,51 @@ class DatabaseHandler {
       },
     ).toList();
     return receiveCheck;
+  }
+
+  // 주문화면
+  Future<List<ReceiveData>> getRecive(String receive) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery('''
+          select pur.id id, pro.name name, pur.quantity quantity, 
+          pur.product_size size, pur.purchasedate purdate, pro.image image
+          from purchase pur, product pro
+          where pro.id = pur.product_id and pur.id = ?
+        ''', [receive]);
+    return queryResult
+        .map(
+          (e) => ReceiveData.fromMap(e),
+        )
+        .toList();
+  }
+
+  Future<void> insertReceiveStatus(String receive) async {
+    final Database db = await initializeDB();
+
+    final List<Map<String, Object?>> queryResult = await db.rawQuery('''
+          select *
+          from purchase
+          where id = ?
+        ''', [receive]);
+    List<Purchase> purchase = queryResult
+        .map(
+          (e) => Purchase.fromMap(e),
+        )
+        .toList();
+
+    await db.rawInsert('''
+          INSERT INTO purchase
+          VALUES 
+          (?, '수령', ?, ?, ?, ?, ?, ?, ?);
+        ''', [
+      purchase[0].id,
+      purchase[0].shopId,
+      purchase[0].customerSeq,
+      purchase[0].productId,
+      purchase[0].productSize,
+      purchase[0].purchaseDate,
+      purchase[0].purchasePrice,
+      purchase[0].quantity
+    ]);
   }
 }
