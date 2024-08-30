@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shose_web/model/sales.dart';
 import 'package:shose_web/view/sales_chart.dart';
-import 'package:shose_web/view/sales_grape.dart';
 import 'package:shose_web/vm/database_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -56,17 +55,17 @@ class _CurrentSituationState extends State<CurrentSituation> {
                       return Card(
                         child: Column(
                           children: [
-                            Text(
+                            const Text(
                               '매출 현황',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Divider(),
+                            const Divider(),
                             Row(
                               children: [
-                                Text(
+                                const Text(
                                   '판매수량',
                                   style: TextStyle(
                                     fontSize: 20,
@@ -74,19 +73,19 @@ class _CurrentSituationState extends State<CurrentSituation> {
                                 ),
                                 Text(
                                   '${snapshot.data![0].quantityall.toString()}켤례',
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Text(
+                                const Text(
                                   '이번 달 매출',
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
                                   '${snapshot.data![0].sale.toString()}원',
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 )
                               ],
                             ),
@@ -111,7 +110,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                       children: [
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               '전체 판매량 보기',
                               style: TextStyle(
                                 fontSize: 40,
@@ -119,12 +118,12 @@ class _CurrentSituationState extends State<CurrentSituation> {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  Get.to(() => const SalesGrape());
+                                  Get.to(() => const SalesChart());
                                 },
-                                icon: Icon(Icons.arrow_forward)),
+                                icon: const Icon(Icons.arrow_forward)),
                           ],
                         ),
-                        Text(
+                        const Text(
                           '베스트 브랜드',
                           style: TextStyle(fontSize: 30),
                         )
@@ -146,13 +145,13 @@ class _CurrentSituationState extends State<CurrentSituation> {
                                   children: [
                                     Text(
                                       '${snapshot.data![0].name} (${snapshot.data![0].color})',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       '${snapshot.data![0].price.toString()}원',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -185,7 +184,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                       children: [
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               '전체 매출 보기',
                               style: TextStyle(
                                 fontSize: 40,
@@ -193,12 +192,12 @@ class _CurrentSituationState extends State<CurrentSituation> {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  Get.to(() => SalesChart()); //차트
+                                  Get.to(() => const SalesChart()); //차트
                                 },
-                                icon: Icon(Icons.arrow_forward)),
+                                icon: const Icon(Icons.arrow_forward)),
                           ],
                         ),
-                        Text(
+                        const Text(
                           '매장 별 판매수량',
                           style: TextStyle(fontSize: 30),
                         ),
