@@ -35,59 +35,63 @@ class _RegisterState extends State<Register> {
       appBar: AppBar(
         title: Text('회원가입'),
       ),
-      body: Center(
-        child: Container(
-          width: 350,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 250,
-                    child: TextField(
-                      controller: idController,
-                      decoration: InputDecoration(labelText: '아이디'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            width: 350,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 250,
+                      child: TextField(
+                        controller: idController,
+                        decoration: InputDecoration(labelText: '아이디'),
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => idSameCheck(idController.text.trim()),
-                    child: Text('중복확인'),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Colors.grey,
-                        foregroundColor: Colors.white),
-                  ),
-                ],
-              ),
-              TextField(
-                controller: passwordController1,
-                decoration: InputDecoration(labelText: '비밀번호'),
-              ),
-              TextField(
-                controller: passwordController2,
-                decoration: InputDecoration(labelText: '비밀번호 확인'),
-              ),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: '이름'),
-              ),
-              TextField(
-                controller: phoneController,
-                decoration: InputDecoration(labelText: '연락처'),
-              ),
-              ElevatedButton(
-                onPressed: () => joinClick(idController.text.trim()), //
-                child: Text('회원가입'),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    ElevatedButton(
+                      onPressed: () => idSameCheck(idController.text.trim()),
+                      child: Text('중복확인'),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.grey,
+                          foregroundColor: Colors.white),
                     ),
-                    backgroundColor: Colors.yellow,
-                    foregroundColor: Colors.black),
-              ),
-            ],
+                  ],
+                ),
+                TextField(
+                  controller: passwordController1,
+                  decoration: InputDecoration(labelText: '비밀번호'),
+                  obscureText: true //비번 ****
+                ),
+                TextField(
+                  controller: passwordController2,
+                  decoration: InputDecoration(labelText: '비밀번호 확인'),
+                  obscureText: true //비번 ****
+                ),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: '이름'),
+                ),
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(labelText: '연락처'),
+                ),
+                ElevatedButton(
+                  onPressed: () => joinClick(idController.text.trim()), //
+                  child: Text('회원가입'),
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.yellow,
+                      foregroundColor: Colors.black),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,7 +150,6 @@ class _RegisterState extends State<Register> {
     //b. 회원가입 버튼 클릭
     List<dynamic> checkList = await handler.idCheck(checkId);
     if (checkList[0] == 0) {
-      _showDialogIdOk();
       if (passwordController1.text.trim() == passwordController2.text.trim()) {
         insertCustomer();
         _showDialogPasswordOk();

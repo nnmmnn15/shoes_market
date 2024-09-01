@@ -23,7 +23,6 @@ class _LoginState extends State<Login> {
   final box = GetStorage();
 
 
-
   @override
   void initState() {
     super.initState();
@@ -36,6 +35,7 @@ class _LoginState extends State<Login> {
     box.write('id',"");
     box.write('password', "");
   }
+
 
   @override
   void dispose() {    // 앱 종료했때 Storage
@@ -53,83 +53,87 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: Text('로그인'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child:
-                  Container(child: Image.asset('images/abcd.png'), width: 270),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-              child: TextField(
-                controller: idController,
-                decoration: InputDecoration(labelText: '아이디를 입력하세요'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child:
+                    Container(child: Image.asset('images/abcd.png'), width: 270),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-              child: TextField(
-                controller: passwordController,
-                decoration: InputDecoration(labelText: '비밀번호를 입력하세요'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                child: TextField(
+                  controller: idController,
+                  decoration: InputDecoration(labelText: '아이디를 입력하세요'),
+                ),
               ),
-            ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        List<dynamic> checkList = await handler.checkCustomer(
-                            idController.text, passwordController.text);
-                        if (checkList[0] == 1) {  //첫번째 리스트가 1이면 
-                          box.write('abcd_user_seq', checkList[1]);  //고객번호 GetStorage에 통해 사용! 
-                        print(checkList);
-                        _showDialogPasswordOk();
-                          idController.text = '';
-                          passwordController.text = '';
-                        } else {
-                          errorSnackBar();
-                        }
-                      },
-                      child: Text('로 그 인'),
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          backgroundColor: Colors.yellow,
-                          foregroundColor: Colors.black),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('아이디가 없다면?    '),
-                          ElevatedButton(
-                            onPressed: () => Get.to(Register()),
-                            child: Text('회원가입'),
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              backgroundColor: Colors.grey,
-                              foregroundColor: Colors.white,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                child: TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: '비밀번호를 입력하세요'),
+                  obscureText: true  //비번 ****
+                ),
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          List<dynamic> checkList = await handler.checkCustomer(
+                              idController.text, passwordController.text);
+                          if (checkList[0] == 1) {  //첫번째 리스트가 1이면 
+                            box.write('abcd_user_seq', checkList[1]);  //고객번호 GetStorage에 통해 사용! 
+                          print('확인 ${checkList}');
+                          _showDialogPasswordOk();
+                            idController.text = '';
+                            passwordController.text = '';
+                          } else {
+                            errorSnackBar();
+                          }
+                        },
+                        child: Text('로 그 인'),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ),
-                        ],
+                            backgroundColor: Colors.yellow,
+                            foregroundColor: Colors.black),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('아이디가 없다면?    '),
+                            ElevatedButton(
+                              onPressed: () => Get.to(Register()),
+                              child: Text('회원가입'),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Colors.grey,
+                                foregroundColor: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
