@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:shoes_market_app/model/customer.dart';
 import 'package:shoes_market_app/model/product.dart';
+import 'package:shoes_market_app/model/purchase.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHandler {
@@ -115,6 +116,8 @@ class DatabaseHandler {
     return result;
   }
 
+
+
 //-------------회원가입시 아이디체크--------------
   Future<List<dynamic>> idCheck(String checkId) async {
     final Database db = await initializeDB();
@@ -123,12 +126,10 @@ class DatabaseHandler {
     final List<Map<String, Object?>> queryResult = await db.rawQuery("""
     select count(*) id from customer where id = '$checkId'
     """);
-    idCheck = int.parse(queryResult[0]['id'].toString());
-    // queryResult[0]['id'];
+    idCheck = int.parse(queryResult[0]['id'].toString());  // queryResult[0]['id'];
     queryResult.map(
       (e) {
-        Map<String, dynamic> res = e;
-        // idCheck = res['id'];
+        Map<String, dynamic> res = e;  // idCheck = res['id'];
         id = res['id'];
       },
     ).toList();
@@ -151,6 +152,7 @@ class DatabaseHandler {
       },
     ).toList();
     return [idCheck, idSeq];
+    return [idCheck];
   }
 
 //-------------로그인자 이름불러오기-------------
@@ -159,7 +161,7 @@ class DatabaseHandler {
     final Database db = await initializeDB(); // 데이터베이스 연결 초기화.
     // SQL 쿼리를 실행하여 주어진 ID와 비밀번호로 이름 가져옴
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        'SELECT name FROM customer WHERE id = ? AND password = ?', [id, pw]);
+        'SELECT name from customer where id = ? AND password = ?', [id, pw]);
     if (queryResult.isNotEmpty) {
       // 쿼리 결과가 비어 있지 않으면 이름 반환
       final Map<String, dynamic> row = queryResult.first;
@@ -168,4 +170,39 @@ class DatabaseHandler {
       return 'empty'; // 고객을 찾을 수 없으면 null 반환
     }
   }
+
+//-------------구매현황 리스트 불러오기------------
+  // Future<List<Purchase>> purchase_list() async{
+  // final Database db = await initializeDB();
+  // final List<Map<String,Object?>> queryResult=
+  //     await db.rawQuery('select * from purchase');
+  // return queryResult.map((e) => Purchase.fromMap(e)).toList();
+  // }
+///////////
+  Future<List<Purchase>> getReceivedPurchases() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+      'SELECT * from purchase where status = ?',
+      ['수령'],
+    );
+    return queryResult.map((e) => Purchase.fromMap(e)).toList();
+  }
+
+  Future<List<Purchase>> getNotReceivedPurchases() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+      'SELECT * from purchase where status = ?',
+      ['미수령'],
+    );
+    return queryResult.map((e) => Purchase.fromMap(e)).toList();
+  }
+
+  Future<List<Purchase>> purchase_list() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+      'SELECT * from purchase');
+    return queryResult.map((e) => Purchase.fromMap(e)).toList();
+  }
 }
+
+

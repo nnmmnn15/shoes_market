@@ -22,13 +22,30 @@ class _LoginState extends State<Login> {
   late TextEditingController passwordController;
   final box = GetStorage();
 
+
+
   @override
   void initState() {
     super.initState();
     handler = DatabaseHandler();
     idController = TextEditingController();
     passwordController = TextEditingController();
+  initStorage();
   }
+  initStorage(){      // 로그인 아이디 패스워드 get 저장
+    box.write('id',"");
+    box.write('password', "");
+  }
+
+  @override
+  void dispose() {    // 앱 종료했때 Storage
+    disposeStorage();
+    super.dispose();
+  }
+  disposeStorage(){
+    box.erase();   
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +85,10 @@ class _LoginState extends State<Login> {
                       onPressed: () async {
                         List<dynamic> checkList = await handler.checkCustomer(
                             idController.text, passwordController.text);
-                        if (checkList[0] == 1) {
-                          box.write('abcd_user_seq', checkList[1]);
+                        if (checkList[0] == 1) {  //첫번째 리스트가 1이면 
+                          box.write('abcd_user_seq', checkList[1]);  //고객번호 GetStorage에 통해 사용! 
                         print(checkList);
                         _showDialogPasswordOk();
-                        // name();
-                          // Get.to(
-                          //   () => Shoeslist(),
-                          // );
                           idController.text = '';
                           passwordController.text = '';
                         } else {
@@ -136,7 +149,7 @@ class _LoginState extends State<Login> {
           TextButton(
             onPressed: () {
               Get.back();
-              Get.to(
+              Get.off(
               () => const Tabbar(),
               );
             },
@@ -166,5 +179,9 @@ Future<String> getName() async{
       backgroundColor: Theme.of(context).colorScheme.error,
       colorText: Theme.of(context).colorScheme.onError,
     );
+  }
+  saveStorage(){
+    box.write('id', idController.text.trim());
+    box.write('password', passwordController.text.trim());
   }
 }

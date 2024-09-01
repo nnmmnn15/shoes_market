@@ -182,6 +182,7 @@ class _RegisterState extends State<Register> {
             onPressed: () {
               Get.back();
               Get.back();
+              Get.back();
             },
             child: const Text('확인'),
           ),
