@@ -22,6 +22,10 @@ class _SalesChartState extends State<SalesChart> {
 
   late SalesHandler handler;
 
+  late String checkDate;
+  late String startDate;
+  late String endDate;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,7 @@ class _SalesChartState extends State<SalesChart> {
     tooltipBehavior = TooltipBehavior();
     startDateController = TextEditingController();
     endDateController = TextEditingController();
+    checkDate = '';
   }
 
   @override
@@ -43,52 +48,82 @@ class _SalesChartState extends State<SalesChart> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               dropdownBtn(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('날짜를 입력해주세요'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          controller: startDateController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(8),
+              dropdownValue == items[0]
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('날짜를 입력해주세요'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                controller: startDateController,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(8),
+                                ],
+                                decoration: const InputDecoration(
+                                    labelText: 'YYYYMMDD'),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 50),
+                              child: Text(
+                                '~',
+                                style: TextStyle(fontSize: 30),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                controller: endDateController,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(8),
+                                ],
+                                decoration: const InputDecoration(
+                                    labelText: 'YYYYMMDD'),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                if (startDateController.text.length < 8 ||
+                                    endDateController.text.length < 8) {
+                                  checkDate = '올바른 값이 아닙니다';
+                                  setState(() {});
+                                } else {
+                                  checkDate = '';
+                                  startDate =
+                                      startDateController.text.replaceAllMapped(
+                                    RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                                    (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                                  );
+                                  endDate =
+                                      endDateController.text.replaceAllMapped(
+                                    RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                                    (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                                  );
+                                  print(startDate);
+                                  print(endDate);
+                                  setState(() {});
+                                }
+                              },
+                              icon: const Icon(Icons.search),
+                            ),
                           ],
-                          decoration: const InputDecoration(labelText: 'YYYYMMDD'),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50),
-                        child: Text(
-                          '~',
-                          style: TextStyle(fontSize: 30),
+                        Text(
+                          checkDate,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 8,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        child: TextFormField(
-                          controller: endDateController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(8),
-                          ],
-                          decoration: const InputDecoration(labelText: 'YYYYMMDD'),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          //
-                        },
-                        icon: Icon(Icons.search),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
           dropdownValue == items[0]
@@ -146,7 +181,7 @@ class _SalesChartState extends State<SalesChart> {
   saleByDate() {
     return SizedBox(
       width: 700,
-      height: 600,
+      height: 500,
       child: FutureBuilder(
         future: handler.queryPurchasesalesByDate(),
         builder: (context, snapshot) {
@@ -190,7 +225,7 @@ class _SalesChartState extends State<SalesChart> {
   saleByBrand() {
     return SizedBox(
       width: 700,
-      height: 600,
+      height: 500,
       child: FutureBuilder(
         future: handler.queryPurchasesalesByBrand(),
         builder: (context, snapshot) {
