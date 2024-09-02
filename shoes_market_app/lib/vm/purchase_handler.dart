@@ -131,7 +131,7 @@ class PurchaseHandler{
     return result;
   }
 
-  Future<List<Purchase>> queryPurchase() async {
+  Future<List<PurchaseOrder>> queryPurchase() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
@@ -144,7 +144,7 @@ class PurchaseHandler{
           ''');
     return queryResult
         .map(
-          (e) => Purchase.fromMap(e),
+          (e) => PurchaseOrder.fromMap(e),
         )
         .toList();
   }
