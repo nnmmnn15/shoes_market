@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shoes_market_app/view/orderstatus.dart';
 import 'package:shoes_market_app/vm/database_handler.dart';
 
@@ -16,6 +17,7 @@ class _OrderState extends State<Order> {
   late DatabaseHandler handler;
   late List<String> state_purchase;
   late String dropdownValue;
+  String customerName = '___';
 
   @override
   void initState() {
@@ -23,6 +25,24 @@ class _OrderState extends State<Order> {
     state_purchase = ['전체', '수령', '미수령'];
     dropdownValue = state_purchase[0];
     handler = DatabaseHandler();
+    _loadCustomerName();
+  }
+
+Future<void> _loadCustomerName() async {
+    final box = GetStorage();
+    final dynamic userSeqDynamic = box.read('abcd_user_seq');  // GetStorage에서 고객 번호 읽기('abcd_user_seq'라는 키로 저장된 값)
+
+    if (userSeqDynamic != null) {
+      final int userSeq = userSeqDynamic is int ? userSeqDynamic : int.tryParse(userSeqDynamic.toString()) ?? 0;
+      String? name = await handler.getCustomerNameBySeq(userSeq);
+      setState(() {
+        customerName = name ?? '___';
+      });
+    } else {
+      setState(() {
+        customerName = '___';
+      });
+    }
   }
 
   @override
@@ -80,7 +100,7 @@ class _OrderState extends State<Order> {
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    '{name}의 구매내역',  //로그인 이름 들어가게
+                    '$customerName의 구매내역',  //로그인 이름 들어가게
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

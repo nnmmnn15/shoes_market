@@ -100,7 +100,7 @@ class DatabaseHandler {
         .toList();
   }
 
-//-------------회원가입 정보 DB에 저장--------------
+//-------------register.dart 회원가입 정보 DB에 저장--------------
   Future<int> joinCustomer(Customer customer) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -118,7 +118,7 @@ class DatabaseHandler {
 
 
 
-//-------------회원가입시 아이디체크--------------
+//-------------register.dart 회원가입시 아이디체크--------------
   Future<List<dynamic>> idCheck(String checkId) async {
     final Database db = await initializeDB();
     int idCheck = 0;
@@ -136,7 +136,7 @@ class DatabaseHandler {
     return [idCheck, id];
   }
 
-//-------------로그인--------------
+//-------------login.dart 로그인--------------
   Future<List<dynamic>> checkCustomer(String id, String pw) async {
     final Database db = await initializeDB();
     int idCheck = 0;
@@ -155,13 +155,13 @@ class DatabaseHandler {
     return [idCheck];
   }
 
-//-------------로그인자 이름불러오기-------------
+//-------------login.dart 로그인자 이름불러오기-------------
   Future<String> getCustomerName(String id, String pw) async {
     // 로그인: 주어진 ID와 비밀번호로 고객 이름을 확인
     final Database db = await initializeDB(); // 데이터베이스 연결 초기화.
     // SQL 쿼리를 실행하여 주어진 ID와 비밀번호로 이름 가져옴
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        'SELECT name from customer where id = ? AND password = ?', [id, pw]);
+        'select name from customer where id = ? AND password = ?', [id, pw]);
     if (queryResult.isNotEmpty) {
       // 쿼리 결과가 비어 있지 않으면 이름 반환
       final Map<String, dynamic> row = queryResult.first;
@@ -171,7 +171,8 @@ class DatabaseHandler {
     }
   }
 
-//-------------구매현황 리스트 불러오기------------
+
+//------------- order.dart 구매현황 리스트 불러오기------------
   // Future<List<Purchase>> purchase_list() async{
   // final Database db = await initializeDB();
   // final List<Map<String,Object?>> queryResult=
@@ -182,7 +183,7 @@ class DatabaseHandler {
   Future<List<Purchase>> getReceivedPurchases() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-      'SELECT * from purchase where status = ?',
+      'select * from purchase where status = ?',
       ['수령'],
     );
     return queryResult.map((e) => Purchase.fromMap(e)).toList();
@@ -191,7 +192,7 @@ class DatabaseHandler {
   Future<List<Purchase>> getNotReceivedPurchases() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-      'SELECT * from purchase where status = ?',
+      'select * from purchase where status = ?',
       ['미수령'],
     );
     return queryResult.map((e) => Purchase.fromMap(e)).toList();
@@ -200,9 +201,50 @@ class DatabaseHandler {
   Future<List<Purchase>> purchase_list() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-      'SELECT * from purchase');
+      'select* from purchase');
     return queryResult.map((e) => Purchase.fromMap(e)).toList();
   }
+
+//------------ order.dart 구매자 이름 불러오기 ----------
+Future<String?> getCustomerNameBySeq(int userSeq) async {
+  final Database db = await initializeDB();
+    final result = await db.query(  // SQL 쿼리 문자열을 직접 사용
+      'customer_table', // 테이블 이름
+      where: 'seq = ?', // 조건
+      whereArgs: [userSeq]);  // 조건에 사용할 값
+    if (result.isNotEmpty) {
+      final customer = Customer.fromMap(result.first);
+      return customer.name;
+    }
+    return null;
+  }
+
+
+//-------------orderstate.dart 주문 상태 보기------------
+    Future<List<Purchase>> order_detail(String orderstate) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        // '''
+        //   select pur.id id, pro.name name, pur.quantity quantity, 
+        //   pur.product_size size, pur.purchasedate purdate, pro.image image
+        //   from purchase pur, product pro
+        //   where pro.id = pur.product_id and pur.id = ?
+        // ''', [orderstate]);
+        '''
+          select id, product_size, purchasedate, quantity
+          from purchase
+          where id = ?
+        ''', [orderstate]);
+    return queryResult
+        .map(
+          (e) => Purchase.fromMap(e),
+        )
+        .toList();
+  }
+
+
+
+
 }
 
 
