@@ -11,7 +11,7 @@ class Shop{
     required this.phone
   });
 
-   Shop.fromMap(Map<String, dynamic> res):    
+  Shop.fromMap(Map<String, dynamic> res):    
     id = res['id'],
     name = res['name'],
     location = res['location'],

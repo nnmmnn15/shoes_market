@@ -2,6 +2,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:shoes_market_app/model/purchase.dart';
 import 'package:shoes_market_app/model/purchase_order.dart';
+import 'package:shoes_market_app/model/purchase_order_detail.dart';
+import 'package:shoes_market_app/model/transport.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PurchaseHandler{
@@ -151,6 +153,39 @@ class PurchaseHandler{
     return queryResult
         .map(
           (e) => PurchaseOrder.fromMap(e),
+        )
+        .toList();
+  }
+
+  Future<List<PurchaseOrderDetail>> queryPurchasedetail() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery(
+          '''
+          select s.name, pur.id, pro.image, pro.name, pro.size, pro.color
+          from purchase pur, product pro, shop s
+          where pur.product_id = pro.id AND pur.product_size = pro.size AND
+          pur.shop_id = s.id;
+          ''');
+    return queryResult
+        .map(
+          (e) => PurchaseOrderDetail.fromMap(e),
+        )
+        .toList();
+  }
+
+  Future<List<Transport>> queryTransport() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery(
+          '''
+          select date
+          from transport
+          where purchaseid;
+          ''');
+    return queryResult
+        .map(
+          (e) => Transport.fromMap(e),
         )
         .toList();
   }
