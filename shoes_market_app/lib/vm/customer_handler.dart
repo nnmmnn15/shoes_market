@@ -41,6 +41,7 @@ class CustomerHandler {
               shop_id integer,
               product_id text,
               date text,
+              purchaseid text,
               primary key(id, status)
             )
         """);
