@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_market_app/model/shop.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 import 'package:shoes_market_app/vm/shop_handler.dart';
+import 'package:shoes_market_app/vm/transport_handler.dart';
 
 class PurchaseDetail extends StatefulWidget {
   const PurchaseDetail({super.key});
@@ -14,6 +14,7 @@ class PurchaseDetail extends StatefulWidget {
 class _PurchaseDetailState extends State<PurchaseDetail> {
   late ShopHandler shopHandler;
   late PurchaseHandler purchaseHandler;
+  late TransportHandler transportHandler;
   late TextEditingController quantityController;
   late List<String> items;
   late String dropdownValue;
@@ -41,6 +42,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
       0.5,
     ];
     buttonText = [240, 245, 250, 255, 260, 265, 270, 275, 280];
+    transportHandler = TransportHandler();
     purchaseHandler = PurchaseHandler();
     shopHandler = ShopHandler();
     shopId = [];
@@ -122,10 +124,13 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   items: items.map((String items) {
                     return DropdownMenuItem(
                         value: items,
-                        child: Text(
-                          items,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
+                        child: SizedBox(
+                          width: 120,
+                          child: Text(
+                            items,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                           ),
                         ));
                   }).toList(),
@@ -439,6 +444,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                                      print('make purchase');
                         makePurchase();
                       },
                       child: const Text('구매'),
@@ -488,6 +494,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 int.parse(quantityController.text.trim())
               );
               final int result = await purchaseHandler.insertPurchase(temp);
+              final int transportresult = await transportHandler.insertTransport(temp);
               Get.back();
             },
             child: const Text('확인')),

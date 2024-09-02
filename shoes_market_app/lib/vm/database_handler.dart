@@ -116,6 +116,8 @@ class DatabaseHandler {
     return result;
   }
 
+
+
 //-------------회원가입시 아이디체크--------------
   Future<List<dynamic>> idCheck(String checkId) async {
     final Database db = await initializeDB();

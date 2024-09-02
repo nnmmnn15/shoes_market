@@ -1,8 +1,11 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:shoes_market_app/model/purchase.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PurchaseHandler{
+  final box = GetStorage();
+
   Future<Database> initializeDB() async{
     String path = await getDatabasesPath();
     return openDatabase(
@@ -83,6 +86,7 @@ class PurchaseHandler{
 
   Future<int> insertPurchase((String, String, int, String, int, int) temp) async {
     // temp(product_id, shopname, size, purchasedate, purchaseprice, quantity
+    DateTime now = DateTime.now();
     int result = 0;
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryshopResult = await db.rawQuery(
@@ -93,11 +97,13 @@ class PurchaseHandler{
       ''', [
         temp.$2
         ]);
+
     Purchase purchaseData = Purchase(
-      id: queryshopResult[0]['id'].toString()+ DateTime.now().toString(), 
+      id: queryshopResult[0]['id'].toString() + box.read('abcd_user_seq').toString()+ now.year.toString()+ now.month.toString()
+          + now.day.toString() + now.hour.toString() + now.minute.toString() + now.second.toString(), 
       status: '미수령', 
       shopId: int.parse(queryshopResult[0]['id'].toString()), 
-      customerSeq: 1,  // 임시
+      customerSeq: box.read('abcd_user_seq'),  // 임시
       productId: temp.$1, 
       productSize: temp.$3, 
       purchaseDate: temp.$4, 
@@ -123,4 +129,23 @@ class PurchaseHandler{
     );
     return result;
   }
+
+  Future<List<Purchase>> queryPurchase() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery(
+          '''
+          select DISTINCT pro.name, pro.size, pro.color, pur.quantity, pro.price, pur.purchasedate, s.name 
+          from purchase pur, product pro, shop s, customer c
+          where pur.customer_seq = c.seq and
+          pur.product_id = pro.id AND pur.product_size = pro.size AND
+          pur.shop_id = s.id;
+          ''');
+    return queryResult
+        .map(
+          (e) => Purchase.fromMap(e),
+        )
+        .toList();
+  }
+
 }
