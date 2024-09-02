@@ -74,6 +74,7 @@ class _OrderstatusState extends State<Orderstatus> {
               future: purchaseHandler.queryPurchasedetail(purchaseId),
               builder: (context, snapshot) {
                 if(snapshot.hasData){
+                  
                   return Card(
                     child: Column(
                       children: [

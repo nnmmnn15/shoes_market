@@ -77,6 +77,7 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery("""
         select * from product 
+        group by id
         """);
     return queryResult
         .map(
@@ -91,7 +92,7 @@ class DatabaseHandler {
     }
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery("""
-            select * from product where name like '%$query%'
+            select * from product where name like '%$query%' group by id
         """);
     return queryResult
         .map(
