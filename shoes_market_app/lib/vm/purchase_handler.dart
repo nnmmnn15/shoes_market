@@ -1,6 +1,7 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:shoes_market_app/model/purchase.dart';
+import 'package:shoes_market_app/model/purchase_order.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PurchaseHandler{
@@ -130,20 +131,26 @@ class PurchaseHandler{
     return result;
   }
 
-  Future<List<Purchase>> queryPurchase() async {
+  Future<List<PurchaseOrder>> queryPurchase() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
           '''
-          select DISTINCT pro.name, pro.size, pro.color, pur.quantity, pro.price, pur.purchasedate, s.name 
-          from purchase pur, product pro, shop s, customer c
-          where pur.customer_seq = c.seq and
-          pur.product_id = pro.id AND pur.product_size = pro.size AND
-          pur.shop_id = s.id;
-          ''');
+          SELECT product.name as pname, purchase.product_size as size, 
+          product.color as color, purchase.quantity as quantity, 
+          purchase.purchaseprice as price, purchase.purchasedate as purchasedate, 
+          shop.name sname, purchase.id as id, MAX(purchase.status) as status
+          FROM purchase, customer, product, shop
+          WHERE purchase.customer_seq = ?
+          AND purchase.customer_seq = customer.seq
+          AND purchase.product_id = product.id
+          AND shop.id = purchase.shop_id
+          GROUP BY purchase.id
+          ''',[box.read('abcd_user_seq')]);
+
     return queryResult
         .map(
-          (e) => Purchase.fromMap(e),
+          (e) => PurchaseOrder.fromMap(e),
         )
         .toList();
   }

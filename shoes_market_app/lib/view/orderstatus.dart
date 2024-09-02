@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Orderstatus extends StatefulWidget {
   const Orderstatus({super.key});
@@ -8,6 +9,12 @@ class Orderstatus extends StatefulWidget {
 }
 
 class _OrderstatusState extends State<Orderstatus> {
+  var purchaseId = Get.arguments ?? "__";
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
