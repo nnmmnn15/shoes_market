@@ -39,6 +39,7 @@ class DatabaseHandler {
               shop_id integer,
               product_id text,
               date text,
+              purchaseid text,
               primary key(id, status)
             )
         """);
@@ -72,6 +73,7 @@ class DatabaseHandler {
     );
   }
 
+  // 로그인
   Future<List<dynamic>> checkCustomer(String id, String pw) async {
     final Database db = await initializeDB();
     int idCheck = 0;
@@ -90,12 +92,19 @@ class DatabaseHandler {
     return [idCheck, idSeq];
   }
 
-  // 로그인
+  // 주문확인
   Future<int> checkRecive(int seq, String receive) async {
     int receiveCheck = 0; // 여부 확인
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        'select count(id) as checkreceive from purchase where customer_seq = ? and id = ?',
+        '''
+        select count(*) as checkreceive
+        from transport, purchase
+        where  transport.purchaseid = purchase.id
+        AND purchase.customer_seq = ?
+        AND purchaseid = ?
+        AND transport.status = '매장입고'
+        ''',
         [seq, receive]);
 
     queryResult.map(

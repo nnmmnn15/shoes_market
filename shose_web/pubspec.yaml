@@ -49,6 +49,9 @@ dependencies:
   sqflite: ^2.3.3+1
   path: ^1.9.0
 
+  # Calendar
+  table_calendar: ^3.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

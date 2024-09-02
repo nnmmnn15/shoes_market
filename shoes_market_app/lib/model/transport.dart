@@ -1,4 +1,4 @@
-class Transport{
+class Transport {
   int? id;
   String status;
   int shopId;
