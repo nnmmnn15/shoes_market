@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shoes_market_app/vm/purchase_handler.dart';
+import 'package:shoes_market_app/vm/shop_handler.dart';
 
 class Order extends StatefulWidget {
   const Order({super.key});
@@ -8,8 +11,146 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
+  
+  late ShopHandler shopHandler;
+  late PurchaseHandler purchaseHandler;
+  late TextEditingController quantityController;
+  late List<String> items;
+  late String dropdownValue;
+  late String imageName;
+  late List<int> buttonText;
+  late int currentSize;
+  var value = Get.arguments ?? '__';
+  late List<dynamic> shopId;
+  late List<dynamic> shops;
+
+  @override
+  void initState() {
+    super.initState();
+    purchaseHandler = PurchaseHandler();
+    shopHandler = ShopHandler();
+    shopId = [];
+    shops = [];
+    items = [
+      '매장',
+    ];
+    getShop();
+    dropdownValue = '매장';
+  }
+
+  getShop() async {
+    shops = await shopHandler.queryShop();
+    for (int i = 0; i < shops.length; i++) {
+      items.add(shops[i]['name']);
+      shopId.add(shops[i]['id']);
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 60,
+        backgroundColor: Colors.yellow[700],
+        title: const SizedBox(
+          height: 70,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(109, 0, 0, 0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'ABC',
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900),
+                    ),
+                    Text(
+                      'D',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'MART',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 24,
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text('$value님의 구매내역'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: DropdownButton(
+                  dropdownColor: Theme.of(context).colorScheme.primaryContainer,
+                  iconEnabledColor: Theme.of(context).colorScheme.secondary,
+                  value: dropdownValue,
+                  items: items.map((String items) {
+                    return DropdownMenuItem(
+                        value: items,
+                        child: Text(
+                          items,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                        ));
+                  }).toList(),
+                  onChanged: (value) {
+                    dropdownValue = value!;
+                    setState(() {});
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: 500,
+            height: 500,
+            child: FutureBuilder(
+              future: purchaseHandler.queryPurchase(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Card(
+                    child: Column(
+                      children: [
+                        Text(snapshot.data![0].productId),
+                        Text(''),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_market_app/model/shop.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 import 'package:shoes_market_app/vm/shop_handler.dart';
 
@@ -122,10 +121,13 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   items: items.map((String items) {
                     return DropdownMenuItem(
                         value: items,
-                        child: Text(
-                          items,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
+                        child: SizedBox(
+                          width: 120,
+                          child: Text(
+                            items,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                           ),
                         ));
                   }).toList(),
@@ -439,6 +441,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                                      print('make purchase');
                         makePurchase();
                       },
                       child: const Text('구매'),
@@ -488,6 +491,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 int.parse(quantityController.text.trim())
               );
               final int result = await purchaseHandler.insertPurchase(temp);
+              if(result == 0){
+                print('insert failed');
+              }
               Get.back();
             },
             child: const Text('확인')),
