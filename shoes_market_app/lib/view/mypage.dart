@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_market_app/model/customer.dart';
 import 'package:shoes_market_app/view/login.dart';
 import 'package:shoes_market_app/view/order.dart';
 import 'package:shoes_market_app/vm/customer_handler.dart';
@@ -55,7 +54,7 @@ class _MypageState extends State<Mypage> {
                                   children: [
                                     Text(
                                       '이름: ${snapshot.data![0].name}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 24,
                                       ),
                                     ),
@@ -64,7 +63,7 @@ class _MypageState extends State<Mypage> {
                                           0, 10, 0, 0),
                                       child: Text(
                                         '전화번호: ${snapshot.data![0].phone}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 24,
                                         ),
                                       ),
@@ -77,7 +76,7 @@ class _MypageState extends State<Mypage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-                          child: Container(
+                          child: SizedBox(
                             height: 200,
                             width: 350,
                             child: Padding(
@@ -85,7 +84,7 @@ class _MypageState extends State<Mypage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       border: Border.symmetric(
                                           horizontal:
                                               BorderSide(color: Colors.black)),
@@ -94,15 +93,14 @@ class _MypageState extends State<Mypage> {
                                     width: 300,
                                     child: TextButton(
                                       onPressed: () {
-                                        int mySeq =
-                                            box.read('abcd_user_seq');
-                                        print(mySeq);
+                                        Get.to(const Order(), arguments: 
+                                          snapshot.data![0].name
+                                        );
                                         //짜신 핸들러에 mySeq담아 보내서 쿼리하기
-                                        Get.to(const Order());
                                       },
                                       child: Text(
                                         '${snapshot.data![0].name}님의 구매내역',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                         ),
                                       ),
@@ -112,7 +110,7 @@ class _MypageState extends State<Mypage> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         border: Border.symmetric(
                                             horizontal: BorderSide(
                                                 color: Colors.black)),
@@ -141,7 +139,7 @@ class _MypageState extends State<Mypage> {
                                             ],
                                           );
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           '로그아웃',
                                           style: TextStyle(
                                             fontSize: 20,

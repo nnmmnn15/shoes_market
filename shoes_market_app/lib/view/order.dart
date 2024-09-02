@@ -11,6 +11,7 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
+  
   late ShopHandler shopHandler;
   late PurchaseHandler purchaseHandler;
   late TextEditingController quantityController;
@@ -99,7 +100,7 @@ class _OrderState extends State<Order> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Text('님의 구매내역'),
+                child: Text('$value님의 구매내역'),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),

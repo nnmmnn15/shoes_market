@@ -1,5 +1,4 @@
 import 'package:path/path.dart';
-import 'package:shoes_market_app/model/shop.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ShopHandler {
