@@ -18,8 +18,8 @@ class Transport {
   Transport.fromMap(Map<String, dynamic> res)
       : id = res['id'],
         status = res['status'],
-        shopId = res['shopId'],
-        productId = res['productId'],
+        shopId = res['shop_id'],
+        productId = res['product_id'],
         date = res['date'],
         purchaseid = res['purchaseid'];
 }

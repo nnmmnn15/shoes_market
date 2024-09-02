@@ -157,7 +157,7 @@ class PurchaseHandler{
         .toList();
   }
 
-  Future<List<PurchaseOrderDetail>> queryPurchasedetail() async {
+  Future<List<PurchaseOrderDetail>> queryPurchasedetail(var purchaseId) async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
@@ -165,8 +165,10 @@ class PurchaseHandler{
           select s.name, pur.id, pro.image, pro.name, pro.size, pro.color
           from purchase pur, product pro, shop s
           where pur.product_id = pro.id AND pur.product_size = pro.size AND
-          pur.shop_id = s.id;
-          ''');
+          pur.shop_id = s.id
+          AND pur.id = ?
+          GROUP By pur.id;
+          ''', [purchaseId]);
     return queryResult
         .map(
           (e) => PurchaseOrderDetail.fromMap(e),

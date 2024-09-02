@@ -127,11 +127,13 @@ class _MypageState extends State<Mypage> {
                                                 .primaryContainer,
                                             barrierDismissible: false,
                                             actions: [
+                                              // 취소버튼
                                               TextButton(
                                                 onPressed: () {
                                                   Get.back();
                                                   Get.off(
                                                     () => const Login(),
+                                                    // 스토리지 시퀀스 지우기
                                                   );
                                                 },
                                                 child: const Text('확인'),

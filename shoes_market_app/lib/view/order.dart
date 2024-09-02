@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 import 'package:shoes_market_app/view/orderstatus.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 import 'package:shoes_market_app/vm/shop_handler.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:get_storage/get_storage.dart';
-import '../model/purchase_order.dart';
 
 
 class Order extends StatefulWidget {
@@ -159,7 +155,7 @@ class _OrderState extends State<Order> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                          Text('${snapshot.data![index].productname.toString()}'),
+                                          Text(snapshot.data![index].productname.toString()),
                                           Text('Size : ${snapshot.data![index].size.toString()}'),
                                           Text('색상 : ${snapshot.data![index].color}'),
                                           ],

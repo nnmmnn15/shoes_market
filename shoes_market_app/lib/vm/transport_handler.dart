@@ -11,7 +11,7 @@ class TransportHandler{
      // product_id, shopname, size, purchasedate, purchaseprice, quantity
     int result = 0;
     final Database db = await handler.initializeDB();
-    int seq = box.read('abcd_user_seq');
+    // int seq = box.read('abcd_user_seq');
     final List<Map<String, Object?>> shopQueryResult =
       await db.rawQuery(
           '''

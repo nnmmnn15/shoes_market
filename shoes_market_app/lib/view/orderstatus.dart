@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 
 class Orderstatus extends StatefulWidget {
@@ -10,6 +11,7 @@ class Orderstatus extends StatefulWidget {
 
 class _OrderstatusState extends State<Orderstatus> {
   late PurchaseHandler purchaseHandler;
+  var purchaseId = Get.arguments ?? "__";
 
   @override
   void initState() {
@@ -69,7 +71,7 @@ class _OrderstatusState extends State<Orderstatus> {
           children: [
             Text('주문 상태'),
             FutureBuilder(
-              future: purchaseHandler.queryPurchasedetail(),
+              future: purchaseHandler.queryPurchasedetail(purchaseId),
               builder: (context, snapshot) {
                 if(snapshot.hasData){
                   return Card(
