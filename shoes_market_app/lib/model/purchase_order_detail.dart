@@ -20,10 +20,10 @@ class PurchaseOrderDetail{
   );
 
   PurchaseOrderDetail.fromMap(Map<String, dynamic> res):
-    shopname = res['name'],
+    shopname = res['shopname'],
     id = res['id'],
     image = res['image'],
-    productname = res['name'],
+    productname = res['productname'],
     size = res['size'],
     color = res['color'];
 }
