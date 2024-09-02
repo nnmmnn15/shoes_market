@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 import 'package:shoes_market_app/vm/shop_handler.dart';
+import 'package:shoes_market_app/vm/transport_handler.dart';
 
 class PurchaseDetail extends StatefulWidget {
   const PurchaseDetail({super.key});
@@ -13,6 +14,7 @@ class PurchaseDetail extends StatefulWidget {
 class _PurchaseDetailState extends State<PurchaseDetail> {
   late ShopHandler shopHandler;
   late PurchaseHandler purchaseHandler;
+  late TransportHandler transportHandler;
   late TextEditingController quantityController;
   late List<String> items;
   late String dropdownValue;
@@ -40,6 +42,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
       0.5,
     ];
     buttonText = [240, 245, 250, 255, 260, 265, 270, 275, 280];
+    transportHandler = TransportHandler();
     purchaseHandler = PurchaseHandler();
     shopHandler = ShopHandler();
     shopId = [];
@@ -491,9 +494,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 int.parse(quantityController.text.trim())
               );
               final int result = await purchaseHandler.insertPurchase(temp);
-              if(result == 0){
-                print('insert failed');
-              }
+              final int transportresult = await transportHandler.insertTransport(temp);
               Get.back();
             },
             child: const Text('확인')),
