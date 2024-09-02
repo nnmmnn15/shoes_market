@@ -120,21 +120,46 @@ class _MypageState extends State<Mypage> {
                                       child: TextButton(
                                         onPressed: () {
                                           Get.defaultDialog(
+                                            radius: 10,
                                             title: '로그아웃',
                                             middleText: '로그아웃 하시겠습니까?.',
                                             backgroundColor: Theme.of(context)
                                                 .colorScheme
                                                 .primaryContainer,
                                             barrierDismissible: false,
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Get.back();
-                                                  Get.off(
-                                                    () => const Login(),
-                                                  );
-                                                },
-                                                child: const Text('확인'),
+                                            actions: [   
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: 130,
+                                                    child: TextButton(
+                                                      onPressed: () => Get.back(), 
+                                                      style: TextButton.styleFrom(
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                                                        foregroundColor: Colors.black,
+                                                        backgroundColor: Colors.brown[50]
+                                                      ),
+                                                      child: const Text('아니오')
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 130,
+                                                    child: TextButton(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                        Get.off(
+                                                          () => const Login(),
+                                                        );
+                                                      },
+                                                      style: TextButton.styleFrom(
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                                                        foregroundColor: Colors.white,
+                                                        backgroundColor: Colors.brown[300]
+                                                      ),
+                                                      child: const Text('예'),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           );
