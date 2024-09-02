@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:shose_web/model/sales_by_type.dart';
 import 'package:shose_web/vm/sales_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class SalesChart extends StatefulWidget {
   const SalesChart({super.key});
@@ -26,6 +28,15 @@ class _SalesChartState extends State<SalesChart> {
   late String checkDate;
   late String startDate;
   late String endDate;
+
+  // Calendar
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
+      .toggledOn; // Can be toggled on/off by longpressing a date
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   @override
   void initState() {
@@ -62,7 +73,7 @@ class _SalesChartState extends State<SalesChart> {
                         padding: const EdgeInsets.all(8.0),
                         child: IconButton(
                           onPressed: () {
-                            //
+                            popWindow(context, '날짜선택');
                           },
                           icon: const Icon(Icons.calendar_month),
                         ),
@@ -321,4 +332,108 @@ class _SalesChartState extends State<SalesChart> {
     ).toList());
   }
 
+  popWindow(BuildContext context, String title) {
+    Get.dialog(Builder(
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              titlePadding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+              title: SizedBox(
+                  width: 560,
+                  height: 50,
+                  child: Stack(children: [
+                    //제목
+                    Positioned(
+                        top: 15,
+                        left: 0,
+                        right: 0,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        )),
+                    //닫기 버튼
+                    Positioned(
+                        width: 45,
+                        height: 45,
+                        right: 0,
+                        child: TextButton(
+                          onPressed: () {
+                            Get.back(); //창 닫기
+                          },
+                          child: const Icon(Icons.close),
+                        ))
+                  ])),
+              //화면에 표시될 영역
+              content: SizedBox(
+                width: 300,
+                height: 350,
+                child: TableCalendar(
+                  firstDay: DateTime.utc(2010, 10, 16),
+                  lastDay: DateTime.utc(2030, 3, 14),
+                  focusedDay: _focusedDay,
+                  selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                  rangeStartDay: _rangeStart,
+                  rangeEndDay: _rangeEnd,
+                  calendarFormat: _calendarFormat,
+                  rangeSelectionMode: _rangeSelectionMode,
+                  onDaySelected: (selectedDay, focusedDay) {
+                    if (!isSameDay(_selectedDay, selectedDay)) {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                      _rangeStart = null;
+                      _rangeEnd = null;
+                      _rangeSelectionMode = RangeSelectionMode.toggledOff;
+                      setStateDialog(() {});
+                    }
+                  },
+                  onRangeSelected: (start, end, focusedDay) {
+                    _selectedDay = null;
+                    _focusedDay = focusedDay;
+                    _rangeStart = start;
+                    _rangeEnd = end;
+                    _rangeSelectionMode = RangeSelectionMode.toggledOn;
+                    setStateDialog(() {});
+                  },
+                  onFormatChanged: (format) {
+                    if (_calendarFormat != format) {
+                      _calendarFormat = format;
+                      setStateDialog(() {});
+                    }
+                  },
+                  onPageChanged: (focusedDay) {
+                    _focusedDay = focusedDay;
+                  },
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    if (_rangeStart != null && _rangeEnd != null) {
+                      startDateController.text =
+                          '${_rangeStart!.year}${_rangeStart!.month.toString().padLeft(2, '0')}${_rangeStart!.day.toString().padLeft(2, '0')}';
+                      endDateController.text =
+                          '${_rangeEnd!.year}${_rangeEnd!.month.toString().padLeft(2, '0')}${_rangeEnd!.day.toString().padLeft(2, '0')}';
+                      startDate = startDateController.text.replaceAllMapped(
+                        RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                        (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                      );
+                      endDate = endDateController.text.replaceAllMapped(
+                        RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                        (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                      );
+                    }
+                    setState(() {});
+                    Get.back();
+                  },
+                  child: const Text('적용'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    ));
+  }
 } // End
