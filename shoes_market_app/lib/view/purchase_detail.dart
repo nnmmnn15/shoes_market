@@ -73,398 +73,404 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 60,
-        backgroundColor: Colors.yellow[700],
-        title: const SizedBox(
-          height: 70,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(109, 0, 0, 0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'ABC',
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.red,
-                          fontWeight: FontWeight.w900),
-                    ),
-                    Text(
-                      'D',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'MART',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 24,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 60,
+          backgroundColor: Colors.yellow[700],
+          title: const SizedBox(
+            height: 70,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(109, 0, 0, 0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'ABC',
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w900),
                       ),
-                    )
-                  ],
-                )
-              ],
+                      Text(
+                        'D',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'MART',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 24,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+          child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: DropdownButton(
-                  dropdownColor: Theme.of(context).colorScheme.primaryContainer,
-                  iconEnabledColor: Theme.of(context).colorScheme.secondary,
-                  value: dropdownValue,
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                        value: items,
-                        child: SizedBox(
-                          width: 120,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: DropdownButton(
+                      dropdownColor: Theme.of(context).colorScheme.primaryContainer,
+                      iconEnabledColor: Theme.of(context).colorScheme.secondary,
+                      value: dropdownValue,
+                      items: items.map((String items) {
+                        return DropdownMenuItem(
+                            value: items,
+                            child: SizedBox(
+                              width: 130,
+                              child: Text(
+                                items,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                            ));
+                      }).toList(),
+                      onChanged: (value) async{
+                        currentShopIdx = shopId[items.indexOf(value!)];
+                        dropdownValue = value;
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(color: Colors.grey[200]),
+                          height: 180,
+                          width:  MediaQuery.of(context).size.width/2.2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                height: 180,
+                                width:  MediaQuery.of(context).size.width/2,
+                                child: Image.memory(value[3],
+                                fit: BoxFit.cover,),
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50, 30, 0, 0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              value[1],
+                              style: const TextStyle(
+                                fontSize: 40,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '가격: ₩ ${value[2]}',
+                              style: const TextStyle(
+                                fontSize: 30,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[0],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(0);
+                          },
                           child: Text(
-                            items,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
+                            buttonText[0].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
                             ),
                           ),
-                        ));
-                  }).toList(),
-                  onChanged: (value) async{
-                    currentShopIdx = shopId[items.indexOf(value!)];
-                    dropdownValue = value;
-                    setState(() {});
-                  },
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(color: Colors.grey[200]),
-                      height: 180,
-                      width:  MediaQuery.of(context).size.width/2.2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 180,
-                            width:  MediaQuery.of(context).size.width/2,
-                            child: Image.memory(value[3],
-                            fit: BoxFit.cover,),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[1],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(1);
+                          },
+                          child: Text(
+                            buttonText[1].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
-                        ],
-                      )),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 30, 0, 0),
-                child: Column(
-                  children: [
-                    Row(
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[2],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(2);
+                          },
+                          child: Text(
+                            buttonText[2].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[3],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(3);
+                          },
+                          child: Text(
+                            buttonText[3].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[4],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(4);
+                          },
+                          child: Text(
+                            buttonText[4].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[5],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(5);
+                          },
+                          child: Text(
+                            buttonText[5].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[6],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(6);
+                          },
+                          child: Text(
+                            buttonText[6].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[7],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(7);
+                          },
+                          child: Text(
+                            buttonText[7].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              side: BorderSide(
+                                color: Colors.black,
+                                width: buttonBorder[8],
+                              ),
+                              foregroundColor: Colors.black,
+                              fixedSize: const Size(100, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
+                          onPressed: () {
+                            changeBorder(8);
+                          },
+                          child: Text(
+                            buttonText[8].toString(),
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          value[1],
-                          style: const TextStyle(
-                            fontSize: 40,
+                        const Text('수량 :'),
+                        SizedBox(
+                          width: 200,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            controller: quantityController,
+                            decoration:
+                                const InputDecoration(labelText: '구매 수량을 입력하세요.'),
                           ),
                         ),
                       ],
                     ),
-                    Row(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          '가격: ₩ ${value[2]}',
-                          style: const TextStyle(
-                            fontSize: 30,
-                          ),
+                        ElevatedButton(
+                          onPressed: () {
+                            makePurchase();
+                          },
+                          child: const Text('구매'),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[0],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(0);
-                      },
-                      child: Text(
-                        buttonText[0].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[1],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(1);
-                      },
-                      child: Text(
-                        buttonText[1].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[2],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(2);
-                      },
-                      child: Text(
-                        buttonText[2].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
                   ),
                 ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[3],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(3);
-                      },
-                      child: Text(
-                        buttonText[3].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[4],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(4);
-                      },
-                      child: Text(
-                        buttonText[4].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[5],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(5);
-                      },
-                      child: Text(
-                        buttonText[5].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[6],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(6);
-                      },
-                      child: Text(
-                        buttonText[6].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[7],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(7);
-                      },
-                      child: Text(
-                        buttonText[7].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: buttonBorder[8],
-                          ),
-                          foregroundColor: Colors.black,
-                          fixedSize: const Size(100, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {
-                        changeBorder(8);
-                      },
-                      child: Text(
-                        buttonText[8].toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Text('수량 :'),
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        controller: quantityController,
-                        decoration:
-                            const InputDecoration(labelText: '구매 수량을 입력하세요.'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        makePurchase();
-                      },
-                      child: const Text('구매'),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

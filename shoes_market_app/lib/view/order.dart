@@ -86,7 +86,7 @@ class _OrderState extends State<Order> {
             children: [
               Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Text('$value님의 구매내역')),
+                  child: Text('$value 님의 구매내역')),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: DropdownButton(
@@ -129,55 +129,65 @@ class _OrderState extends State<Order> {
                               arguments: snapshot.data![index].id
                             );
                           },
-                          child: Card(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context).size.width/4.5,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                            Text(snapshot.data![index].productname.toString()),
-                                            Text('Size : ${snapshot.data![index].size.toString()}'),
-                                            Text('색상 : ${snapshot.data![index].color}'),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5,0,0,0),
+                              child: SizedBox(
+                                height: 110,
+                                child: Card(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Row(
                                           children: [
-                                          Text('수량 : ${snapshot.data![index].quantity.toString()}'),
-                                          Text('가격 : ${snapshot.data![index].price.toString()}'),
-                                          Text('구매일자 : ${snapshot.data![index].date}')
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context).size.width/4.5,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                  Text(snapshot.data![index].productname.toString()),
+                                                  Text('Size : ${snapshot.data![index].size.toString()}'),
+                                                  Text('색상 : ${snapshot.data![index].color}'),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                Text('수량 : ${snapshot.data![index].quantity.toString()}'),
+                                                Text('가격 : ${snapshot.data![index].price.toString()}'),
+                                                Text('구매일자 : ${snapshot.data![index].date}')
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                                                  child: Text(snapshot.data![index].shopname),
+                                                ),
+                                                Text(snapshot.data![index].status),
+                                                const Text(''),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0,0,0,10),
-                                            child: Text(snapshot.data![index].shopname),
-                                          ),
-                                          Text(snapshot.data![index].status),
-                                          const Text(''),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ],
                               ),
                             ),
+                          ),
                         );
                       },
                     ),

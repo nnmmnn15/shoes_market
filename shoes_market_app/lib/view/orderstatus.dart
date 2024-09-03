@@ -198,7 +198,7 @@ class _OrderstatusState extends State<Orderstatus> {
                                 children: [
                                   Row(
                                     children: [
-                                      const Text('접수    ',  style: TextStyle(
+                                      const Text('접수          ',  style: TextStyle(
                                               fontSize: 18,
                                             ),
                                             ),
@@ -238,11 +238,16 @@ class _OrderstatusState extends State<Orderstatus> {
                               ),
                             ),
                           ),
-                          snapshot.data!.length == 3 ? const Text('입고 완료 되었습니다.') : const Text(''),
+                          snapshot.data!.length == 3 ? const Padding(
+                            padding:  EdgeInsets.all(10),
+                            child: Text('입고 완료 되었습니다.',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),),
+                          ) : const Text(''),
                           Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.fromLTRB(70,20,20,20),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.location_on),
                                 Text(' $myLocation',
