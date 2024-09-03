@@ -162,7 +162,7 @@ class PurchaseHandler{
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
           '''
-          select s.name, pur.id, pro.image, pro.name, pro.size, pro.color
+          select s.name as shopname, pur.id, pro.image, pro.name as productname, pro.size, pro.color
           from purchase pur, product pro, shop s
           where pur.product_id = pro.id AND pur.product_size = pro.size AND
           pur.shop_id = s.id
@@ -176,16 +176,17 @@ class PurchaseHandler{
         .toList();
   }
 
-  Future<List<Transport>> queryTransport() async {
+  Future<List<Transport>> queryTransport(var purchaseId) async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
           '''
-          select date
+          select *
           from transport
-          where purchaseid;
-          ''');
-    return queryResult
+          where purchaseid = ?
+          ORDER by date desc;
+          ''',[purchaseId]);
+        return queryResult
         .map(
           (e) => Transport.fromMap(e),
         )
