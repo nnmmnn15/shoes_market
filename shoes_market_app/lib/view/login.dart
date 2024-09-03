@@ -33,83 +33,85 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: const Text('로그인'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child:
-                  SizedBox(width: 270, child: Image.asset('images/abcd.png')),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-              child: TextField(
-                controller: idController,
-                decoration: const InputDecoration(labelText: '아이디를 입력하세요'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child:
+                    SizedBox(width: 270, child: Image.asset('images/abcd.png')),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-              child: TextField(
-                obscureText: true,
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: '비밀번호를 입력하세요',
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                child: TextField(
+                  controller: idController,
+                  decoration: const InputDecoration(labelText: '아이디를 입력하세요'),
                 ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      List<dynamic> checkList = await handler.checkCustomer(
-                          idController.text, passwordController.text);
-                      if (checkList[0] == 1) {
-                        box.write('abcd_user_seq', checkList[1]);
-                        _showDialogPasswordOk();
-                        idController.text = '';
-                        passwordController.text = '';
-                      } else {
-                        errorSnackBar();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Colors.yellow,
-                        foregroundColor: Colors.black),
-                    child: const Text('로 그 인'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                child: TextField(
+                  obscureText: true,
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    labelText: '비밀번호를 입력하세요',
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text('아이디가 없다면?    '),
-                        ElevatedButton(
-                          onPressed: () => Get.to(const Register()),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            backgroundColor: Colors.grey,
-                            foregroundColor: Colors.white,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        List<dynamic> checkList = await handler.checkCustomer(
+                            idController.text, passwordController.text);
+                        if (checkList[0] == 1) {
+                          box.write('abcd_user_seq', checkList[1]);
+                          _showDialogPasswordOk();
+                          idController.text = '';
+                          passwordController.text = '';
+                        } else {
+                          errorSnackBar();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Text('회원가입'),
-                        ),
-                      ],
+                          backgroundColor: Colors.yellow,
+                          foregroundColor: Colors.black),
+                      child: const Text('로 그 인'),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text('아이디가 없다면?    '),
+                          ElevatedButton(
+                            onPressed: () => Get.to(const Register()),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              backgroundColor: Colors.grey,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('회원가입'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
