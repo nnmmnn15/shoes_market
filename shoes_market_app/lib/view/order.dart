@@ -22,31 +22,16 @@ class _OrderState extends State<Order> {
   late List<int> buttonText;
   late int currentSize;
   var value = Get.arguments ?? '__';
-  late List<dynamic> shopId;
-  late List<dynamic> shops;
 
   @override
   void initState() {
     super.initState();
     purchaseHandler = PurchaseHandler();
     shopHandler = ShopHandler();
-    shopId = [];
-    shops = [];
-    items = [
-      '매장',
-    ];
-    getShop();
-    dropdownValue = '매장';
+    items = ['전체','수령','미수령'];
+    dropdownValue = '전체';
   }
 
-  getShop() async {
-    shops = await shopHandler.queryShop();
-    for (int i = 0; i < shops.length; i++) {
-      items.add(shops[i]['name']);
-      shopId.add(shops[i]['id']);
-    }
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +105,7 @@ class _OrderState extends State<Order> {
                   }).toList(),
                   onChanged: (value) {
                     dropdownValue = value!;
+                    print(value);
                     setState(() {});
                   },
                 ),
@@ -130,7 +116,7 @@ class _OrderState extends State<Order> {
             // width: 500,
             // height: 500,
             child: FutureBuilder(
-              future: purchaseHandler.queryPurchase(),
+              future: purchaseHandler.queryPurchase(dropdownValue),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return SizedBox(

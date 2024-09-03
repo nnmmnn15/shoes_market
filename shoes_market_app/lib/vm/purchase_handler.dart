@@ -133,7 +133,17 @@ class PurchaseHandler{
     return result;
   }
 
-  Future<List<PurchaseOrder>> queryPurchase() async {
+  Future<List<PurchaseOrder>> queryPurchase(String reciveStatus) async {
+    String recive = '';
+    String notRecive = '';
+    if(reciveStatus == "수령"){ 
+      recive = '수령';
+    }else if(reciveStatus =='미수령'){
+      notRecive ='미수령';
+    }else{
+      recive ='수령';
+      notRecive = '미수령';
+      }
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
@@ -148,7 +158,8 @@ class PurchaseHandler{
           AND purchase.product_id = product.id
           AND shop.id = purchase.shop_id
           GROUP BY purchase.id
-          ''',[box.read('abcd_user_seq')]);
+          HAVING purchase.status in (?, ?)
+          ''',[box.read('abcd_user_seq'), recive, notRecive]);
 
     return queryResult
         .map(
