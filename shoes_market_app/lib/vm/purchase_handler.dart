@@ -87,38 +87,10 @@ class PurchaseHandler{
     );
   }
 
-  Future<int> insertPurchase((String, String, int, String, int, int) temp) async {
+  Future<int> insertPurchase(Purchase purchaseData) async {
     // temp(product_id, shopname, size, purchasedate, purchaseprice, quantity
-    DateTime now = DateTime.now();
     int result = 0;
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryshopResult = await db.rawQuery(
-      '''
-          select *
-          from shop
-          where name = ?
-      ''', [
-        temp.$2
-        ]);
-
-    Purchase purchaseData = Purchase(
-      id: queryshopResult[0]['id'].toString() + 
-        box.read('abcd_user_seq').toString()+ 
-        now.year.toString().padLeft(4,'0')+ 
-        now.month.toString().padLeft(2,'0')+
-        now.day.toString().padLeft(2,'0')+
-        now.hour.toString().padLeft(2,'0')+
-        now.minute.toString().padLeft(2,'0')+
-        now.second.toString().padLeft(2,'0'),
-      status: '미수령', 
-      shopId: int.parse(queryshopResult[0]['id'].toString()), 
-      customerSeq: box.read('abcd_user_seq'),  // 임시
-      productId: temp.$1, 
-      productSize: temp.$3, 
-      purchaseDate: temp.$4, 
-      purchasePrice: temp.$5, 
-      quantity: temp.$6
-    );
     result = await db.rawInsert(
       """
         insert into purchase
@@ -179,7 +151,7 @@ class PurchaseHandler{
     final List<Map<String, Object?>> queryResult =
         await db.rawQuery(
           '''
-          select s.name as shopname, pur.id, pro.image, pro.name as productname, pro.size, pro.color
+          select s.name as shopname, s.location as loc, pur.id, pro.image, pro.name as productname, pro.size, pro.color
           from purchase pur, product pro, shop s
           where pur.product_id = pro.id AND pur.product_size = pro.size AND
           pur.shop_id = s.id

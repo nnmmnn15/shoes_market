@@ -136,13 +136,16 @@ class _OrderState extends State<Order> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(5, 5, 15, 5),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                          Text(snapshot.data![index].productname.toString()),
-                                          Text('Size : ${snapshot.data![index].size.toString()}'),
-                                          Text('색상 : ${snapshot.data![index].color}'),
-                                          ],
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context).size.width/4.5,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                            Text(snapshot.data![index].productname.toString()),
+                                            Text('Size : ${snapshot.data![index].size.toString()}'),
+                                            Text('색상 : ${snapshot.data![index].color}'),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Padding(
@@ -157,11 +160,14 @@ class _OrderState extends State<Order> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
+                                        padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                          Text(snapshot.data![index].shopname),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                                            child: Text(snapshot.data![index].shopname),
+                                          ),
                                           Text(snapshot.data![index].status),
                                           const Text(''),
                                           ],

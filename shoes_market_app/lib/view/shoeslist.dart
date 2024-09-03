@@ -28,26 +28,44 @@ class _ShoeslistState extends State<Shoeslist> {
         child: Column(
           children: [
             Flexible(
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      width: MediaQuery.of(context).size.width/7,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                          ),
+                          onPressed: () {
+                            keyword = '전체';
+                            setState(() {});
+                          },
+                          child: const Text('전체')),
                     ),
-                    width: MediaQuery.of(context).size.width/7,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        onPressed: () {
-                          keyword = '전체';
-                          setState(() {});
-                        },
-                        child: const Text('전체')),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Container(
+                        width: MediaQuery.of(context).size.width/6,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: () {
+                              keyword = 'nike';
+                              setState(() {});
+                            },
+                            child: const Text('나이키')),
+                      ),
+                    ),
+                    Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -57,30 +75,30 @@ class _ShoeslistState extends State<Shoeslist> {
                             padding: EdgeInsets.zero,
                           ),
                           onPressed: () {
-                            keyword = 'nike';
+                            keyword = 'adidas';
                             setState(() {});
                           },
-                          child: const Text('나이키')),
+                          child: const Text('아디다스')),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    width: MediaQuery.of(context).size.width/6,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        onPressed: () {
-                          keyword = 'adidas';
-                          setState(() {});
-                        },
-                        child: const Text('아디다스')),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Container(
+                        width: MediaQuery.of(context).size.width/6,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: () {
+                              keyword = 'newbalance';
+                              setState(() {});
+                            },
+                            child: const Text('뉴발란스')),
+                      ),
+                    ),
+                    Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -90,28 +108,13 @@ class _ShoeslistState extends State<Shoeslist> {
                             padding: EdgeInsets.zero,
                           ),
                           onPressed: () {
-                            keyword = 'newbalance';
+                            keyword = 'asics';
                             setState(() {});
                           },
-                          child: const Text('뉴발란스')),
+                          child: const Text('아식스')),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    width: MediaQuery.of(context).size.width/6,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                        ),
-                        onPressed: () {
-                          keyword = '아식스';
-                          setState(() {});
-                        },
-                        child: const Text('아식스')),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Padding(

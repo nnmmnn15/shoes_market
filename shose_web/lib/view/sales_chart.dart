@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shose_web/model/sales.dart';
 import 'package:shose_web/model/sales_by_type.dart';
+import 'package:shose_web/vm/database_handler.dart';
 import 'package:shose_web/vm/sales_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -23,6 +25,7 @@ class _SalesChartState extends State<SalesChart> {
   late TooltipBehavior tooltipBehavior;
 
   late SalesHandler handler;
+  late DatabaseHandler dbHandler;
 
   late String checkDate;
   late String startDate;
@@ -41,7 +44,7 @@ class _SalesChartState extends State<SalesChart> {
   void initState() {
     super.initState();
     items = ['매출', '판매량'];
-    dropdownValue = items[0];
+    dropdownValue = items[1];
     handler = SalesHandler();
     tooltipBehavior = TooltipBehavior();
     startDateController = TextEditingController();
@@ -151,7 +154,14 @@ class _SalesChartState extends State<SalesChart> {
                     saleByBrand(),
                   ],
                 )
-              : Flexible(child: salesAllData())
+              : Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    salesAllData(),
+                    salesByShop(),
+                  ],
+                ))
         ],
       ),
     );
@@ -197,7 +207,7 @@ class _SalesChartState extends State<SalesChart> {
 
   saleByDate() {
     return SizedBox(
-      width: 700,
+      width: 800,
       height: 500,
       child: FutureBuilder(
         future: handler.queryPurchasesalesByDate(startDate, endDate),
@@ -281,6 +291,51 @@ class _SalesChartState extends State<SalesChart> {
     );
   }
 
+  salesByShop() {
+    return SizedBox(
+      width: 1000,
+      height: 300,
+      child: FutureBuilder(
+        future: handler.queryPurchasesalesByShop(startDate, endDate),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Sales> data = snapshot.data!;
+            return Card(
+              child: SfCartesianChart(
+                title: const ChartTitle(),
+                tooltipBehavior: tooltipBehavior,
+                series: [
+                  ColumnSeries<Sales, String>(
+                    color: Theme.of(context).colorScheme.primary,
+                    name: 'Developers',
+                    dataSource: data,
+                    xValueMapper: (Sales pur, _) => pur.name,
+                    yValueMapper: (Sales pur, _) => pur.sale,
+                    dataLabelSettings: const DataLabelSettings(
+                        isVisible: true), //chart위에 숫자표시 신뢰도 상승
+                    enableTooltip: true,
+                    width: 0.05,
+                  ),
+                ],
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(text: '점포'),
+                ),
+                //y축 타이틀 (ylabel)
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(text: '매출'),
+                ),
+              ),
+            ); //그래프
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+
   salesAllData() {
     return FutureBuilder(
       future: handler.queryPurchasesalesByDateAll(startDate, endDate),
@@ -290,11 +345,11 @@ class _SalesChartState extends State<SalesChart> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 600,
-                child: buildTableRow(['일자', '판매수량', '판매액']),
+                width: 550,
+                child: buildTableRow(['일자', '판매수량', '판매액', '순이익']),
               ),
               SizedBox(
-                width: 600,
+                width: 550,
                 height: 500,
                 child: ListView.builder(
                   itemCount: snapshot.data!.length,
@@ -302,7 +357,8 @@ class _SalesChartState extends State<SalesChart> {
                     return buildTableRow([
                       snapshot.data![index].date,
                       snapshot.data![index].quantity,
-                      snapshot.data![index].sale
+                      snapshot.data![index].sale,
+                      (snapshot.data![index].sale * 0.4).toStringAsFixed(0)
                     ]);
                   },
                 ),
@@ -323,7 +379,13 @@ class _SalesChartState extends State<SalesChart> {
         children: data.map(
       (e) {
         return Container(
-          width: 200,
+          alignment: Alignment.center,
+          width: data[0] == e
+              ? 120
+              : data[1] == e
+                  ? 100
+                  : 155,
+          height: 30,
           decoration: BoxDecoration(border: Border.all()),
           child: Text(e.toString()),
         );
@@ -414,6 +476,19 @@ class _SalesChartState extends State<SalesChart> {
                           '${_rangeStart!.year}${_rangeStart!.month.toString().padLeft(2, '0')}${_rangeStart!.day.toString().padLeft(2, '0')}';
                       endDateController.text =
                           '${_rangeEnd!.year}${_rangeEnd!.month.toString().padLeft(2, '0')}${_rangeEnd!.day.toString().padLeft(2, '0')}';
+                      startDate = startDateController.text.replaceAllMapped(
+                        RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                        (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                      );
+                      endDate = endDateController.text.replaceAllMapped(
+                        RegExp(r'(\d{4})(\d{2})(\d{2})'),
+                        (Match m) => "${m[1]}-${m[2]}-${m[3]}",
+                      );
+                    } else if (_rangeEnd == null) {
+                      startDateController.text =
+                          '${_rangeStart!.year}${_rangeStart!.month.toString().padLeft(2, '0')}${_rangeStart!.day.toString().padLeft(2, '0')}';
+                      endDateController.text =
+                          '${_rangeStart!.year}${_rangeStart!.month.toString().padLeft(2, '0')}${_rangeStart!.day.toString().padLeft(2, '0')}';
                       startDate = startDateController.text.replaceAllMapped(
                         RegExp(r'(\d{4})(\d{2})(\d{2})'),
                         (Match m) => "${m[1]}-${m[2]}-${m[3]}",

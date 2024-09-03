@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
 import 'package:shoes_market_app/vm/shop_handler.dart';
 import 'package:shoes_market_app/vm/transport_handler.dart';
+
+import '../model/purchase.dart';
 
 class PurchaseDetail extends StatefulWidget {
   const PurchaseDetail({super.key});
@@ -12,6 +15,8 @@ class PurchaseDetail extends StatefulWidget {
 }
 
 class _PurchaseDetailState extends State<PurchaseDetail> {
+  final box = GetStorage();
+  late int currentShopIdx;
   late ShopHandler shopHandler;
   late PurchaseHandler purchaseHandler;
   late TransportHandler transportHandler;
@@ -28,6 +33,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
   @override
   void initState() {
     super.initState();
+    currentShopIdx = 0;
     currentSize = 0;
     quantityController = TextEditingController();
     buttonBorder = [
@@ -45,7 +51,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
     transportHandler = TransportHandler();
     purchaseHandler = PurchaseHandler();
     shopHandler = ShopHandler();
-    shopId = [];
+    shopId = [
+      0,
+    ];
     shops = [];
     items = [
       '매장',
@@ -134,8 +142,9 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                           ),
                         ));
                   }).toList(),
-                  onChanged: (value) {
-                    dropdownValue = value!;
+                  onChanged: (value) async{
+                    currentShopIdx = shopId[items.indexOf(value!)];
+                    dropdownValue = value;
                     setState(() {});
                   },
                 ),
@@ -150,20 +159,22 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   Container(
                       decoration: BoxDecoration(color: Colors.grey[200]),
                       height: 180,
-                      width: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Image.memory(value[3]),
-                          ],
-                        ),
+                      width:  MediaQuery.of(context).size.width/2.2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 180,
+                            width:  MediaQuery.of(context).size.width/2,
+                            child: Image.memory(value[3],
+                            fit: BoxFit.cover,),
+                          ),
+                        ],
                       )),
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(50, 30, 0, 0),
                 child: Column(
                   children: [
                     Row(
@@ -485,22 +496,44 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
               (String, String, int, String, int, int) temp =
                   // product_id, shopname, size, purchasedate, purchaseprice, quantity
                 (
-                value[0],
-                dropdownValue,
-                currentSize,
-                DateTime.now().toString().substring(0, 10),
-                value[2],
-                int.parse(quantityController.text.trim())
-              );
-              final int result = await purchaseHandler.insertPurchase(temp);
+                  value[0],
+                  dropdownValue,
+                  currentSize,
+                  DateTime.now().toString().substring(0, 10),
+                  value[2],
+                  int.parse(quantityController.text.trim())
+                );
+                DateTime now = DateTime.now();
+                  Purchase purchaseData = Purchase(
+                    id: currentShopIdx.toString() + 
+                      box.read('abcd_user_seq').toString()+ 
+                      now.year.toString().padLeft(4,'0')+ 
+                      now.month.toString().padLeft(2,'0')+
+                      now.day.toString().padLeft(2,'0')+
+                      now.hour.toString().padLeft(2,'0')+
+                      now.minute.toString().padLeft(2,'0')+
+                      now.second.toString().padLeft(2,'0'),
+                    status: '미수령', 
+                    shopId: currentShopIdx, 
+                    customerSeq: box.read('abcd_user_seq'),  // 임시
+                    productId: temp.$1, 
+                    productSize: temp.$3, 
+                    purchaseDate: temp.$4, 
+                    purchasePrice: temp.$5, 
+                    quantity: temp.$6
+                  );
+
+              final int result = await purchaseHandler.insertPurchase(purchaseData);
               if(result == 0){
                 errorSnackBar();
               }
-              final int transportresult = await transportHandler.insertTransport(temp);
+              final int transportresult = await transportHandler.insertTransport(purchaseData);
               if(transportresult == 0){
                 errorSnackBar();
               }
               Get.back();
+              Get.back();
+
             },
             child: const Text('확인')),
       );
@@ -512,8 +545,7 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
       '구매에 실패 하였습니다다',
       snackPosition: SnackPosition.TOP,
       duration: const Duration(seconds: 2),
-      backgroundColor: Theme.of(context).colorScheme.error,
-      colorText: Theme.of(context).colorScheme.onError,
+      
     );
   }
 }

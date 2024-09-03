@@ -228,24 +228,28 @@ class _LoginState extends State<Login> {
   }
 
   buildButtonRow(List<String> buttons) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: buttons.map(
-        (e) {
-          return Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: ElevatedButton(
-              onPressed: () => buttonPressed(e),
-              style: ElevatedButton.styleFrom(fixedSize: const Size(80, 60)),
-              child: Text(
-                e,
-                style:
-                    TextStyle(fontSize: e.length >= 2 && e != '10' ? 15 : 20),
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width/1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: buttons.map(
+          (e) {
+            return Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: ElevatedButton(
+                onPressed: () => buttonPressed(e),
+                style: ElevatedButton.styleFrom(fixedSize: const Size(75, 60)),
+                child: Text(
+                  e,
+                  style:
+                      TextStyle(fontSize: e.length >= 2 && e != '10' ? 13 : 20),
+                ),
               ),
-            ),
-          );
-        },
-      ).toList(),
+            );
+          },
+        ).toList(),
+      ),
     );
   }
 

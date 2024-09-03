@@ -88,28 +88,36 @@ class DatabaseHandler {
 
   Future<List<Sales>> queryPurchasesales() async {
     final Database db = await initializeDB();
+    DateTime now = DateTime.now();
+    String start = '${now.year}-${now.month.toString().padLeft(2,'0')}-01';
+    String end = '${now.year}-${now.month.toString().padLeft(2,'0')}-31';
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
         '''select shop.name as 지점, sum(purchase.purchaseprice * purchase.quantity) as 매출
           from purchase, shop
           where shop.id = purchase.shop_id and
-          purchase.status = '수령'
+          purchase.status = '미수령' AND
+          purchasedate BETWEEN ? AND ?
           group by shop.id;
-          ''');
+          ''',[start, end]);
     return queryResult.map((e) => Sales.fromMap(e)).toList();
   }
 
   Future<List<Bestitem>> queryPurchasebest() async {
     final Database db = await initializeDB();
+    DateTime now = DateTime.now();
+    String start = '${now.year}-${now.month.toString().padLeft(2,'0')}-01';
+    String end = '${now.year}-${now.month.toString().padLeft(2,'0')}-31';
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
         '''SELECT bestseller.name as name, bestseller.color as color, bestseller.price as price, bestseller.image as image, max(bestseller.sum)
             FROM (
             SELECT product.name, product.color, product.price, product.image, sum(purchase.quantity) as sum
             from product, purchase
             where product.id = purchase.product_id AND 
-            purchase.status = '수령'
+            purchase.status = '미수령' AND
+            purchasedate BETWEEN ? AND ?
             GROUP by purchase.product_id
             ) as bestseller;
-          ''');
+          ''', [start, end]);
     return queryResult.map((e) => Bestitem.fromMap(e)).toList();
   }
 
@@ -122,7 +130,7 @@ class DatabaseHandler {
         '''
           SELECT sum(quantity) as 판매켤례, sum(purchaseprice*quantity)sale
           FROM purchase
-          WHERE status = '수령' AND
+          WHERE status = '미수령' AND
           purchasedate BETWEEN ? AND ?;
           ''',[start, end]
       );

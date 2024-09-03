@@ -165,6 +165,7 @@ class _MypageState extends State<Mypage> {
                                                         Get.off(
                                                           () => const Login(),
                                                         );
+                                                        box.remove('abcd_user_seq');
                                                       },
                                                       style: TextButton.styleFrom(
                                                           shape: RoundedRectangleBorder(

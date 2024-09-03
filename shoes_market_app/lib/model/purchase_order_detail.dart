@@ -7,6 +7,7 @@ class PurchaseOrderDetail{
   String productname;
   int size;
   String color;
+  String location;
 
   PurchaseOrderDetail(
     {
@@ -15,7 +16,8 @@ class PurchaseOrderDetail{
       required this.image,
       required this.productname,
       required this.size,
-      required this.color
+      required this.color,
+      required this.location,
     }
   );
 
@@ -25,5 +27,6 @@ class PurchaseOrderDetail{
     image = res['image'],
     productname = res['productname'],
     size = res['size'],
-    color = res['color'];
+    color = res['color'],
+    location = res['loc'];
 }
