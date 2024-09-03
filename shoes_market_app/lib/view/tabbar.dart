@@ -30,6 +30,7 @@ class _TabbarState extends State<Tabbar> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 60,
         backgroundColor: Colors.yellow[700],
