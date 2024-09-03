@@ -444,7 +444,6 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                                      print('make purchase');
                         makePurchase();
                       },
                       child: const Text('구매'),
@@ -494,11 +493,27 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                 int.parse(quantityController.text.trim())
               );
               final int result = await purchaseHandler.insertPurchase(temp);
+              if(result == 0){
+                errorSnackBar();
+              }
               final int transportresult = await transportHandler.insertTransport(temp);
+              if(transportresult == 0){
+                errorSnackBar();
+              }
               Get.back();
             },
             child: const Text('확인')),
       );
     }
+  }
+   errorSnackBar() {
+    Get.snackbar(
+      '구매 실패',
+      '구매에 실패 하였습니다다',
+      snackPosition: SnackPosition.TOP,
+      duration: const Duration(seconds: 2),
+      backgroundColor: Theme.of(context).colorScheme.error,
+      colorText: Theme.of(context).colorScheme.onError,
+    );
   }
 }

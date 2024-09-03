@@ -102,8 +102,14 @@ class PurchaseHandler{
         ]);
 
     Purchase purchaseData = Purchase(
-      id: queryshopResult[0]['id'].toString() + box.read('abcd_user_seq').toString()+ now.year.toString()+ now.month.toString()
-          + now.day.toString() + now.hour.toString() + now.minute.toString() + now.second.toString(), 
+      id: queryshopResult[0]['id'].toString() + 
+        box.read('abcd_user_seq').toString()+ 
+        now.year.toString().padLeft(4,'0')+ 
+        now.month.toString().padLeft(2,'0')+
+        now.day.toString().padLeft(2,'0')+
+        now.hour.toString().padLeft(2,'0')+
+        now.minute.toString().padLeft(2,'0')+
+        now.second.toString().padLeft(2,'0'),
       status: '미수령', 
       shopId: int.parse(queryshopResult[0]['id'].toString()), 
       customerSeq: box.read('abcd_user_seq'),  // 임시

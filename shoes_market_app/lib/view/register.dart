@@ -33,62 +33,83 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원가입'),
+        title: const Text('회원가입'),
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Container(
-            width: 350,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width/ 1.2,
             child: Column(
               children: [
                 Row(
                   children: [
-                    Container(
-                      width: 250,
-                      child: TextField(
-                        controller: idController,
-                        decoration: InputDecoration(labelText: '아이디'),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(7,0,0,0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width/1.8,
+                        child: TextField(
+                          controller: idController,
+                          decoration: const InputDecoration(labelText: '아이디'),
+                        ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () => idSameCheck(idController.text.trim()),
-                      child: Text('중복확인'),
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          backgroundColor: Colors.grey,
-                          foregroundColor: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5,0,0,0),
+                      child: ElevatedButton(
+                        onPressed: () => idSameCheck(idController.text.trim()),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: Colors.grey,
+                            foregroundColor: Colors.white),
+                        child: const Text('중복확인'),
+                      ),
                     ),
                   ],
                 ),
-                TextField(
-                  controller: passwordController1,
-                  decoration: InputDecoration(labelText: '비밀번호'),
-                  obscureText: true //비번 ****
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: passwordController1,
+                    decoration: const InputDecoration(labelText: '비밀번호'),
+                    obscureText: true //비번 ****
+                  ),
                 ),
-                TextField(
-                  controller: passwordController2,
-                  decoration: InputDecoration(labelText: '비밀번호 확인'),
-                  obscureText: true //비번 ****
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: passwordController2,
+                    decoration: const InputDecoration(labelText: '비밀번호 확인'),
+                    obscureText: true //비번 ****
+                  ),
                 ),
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: '이름'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: '이름'),
+                  ),
                 ),
-                TextField(
-                  controller: phoneController,
-                  decoration: InputDecoration(labelText: '연락처'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(labelText: '연락처'),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () => joinClick(idController.text.trim()), //
-                  child: Text('회원가입'),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: Colors.yellow,
-                      foregroundColor: Colors.black),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () => joinClick(idController.text.trim()), //
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Colors.yellow,
+                        foregroundColor: Colors.black),
+                    child: const Text('회원가입'),
+                  ),
                 ),
               ],
             ),
@@ -104,7 +125,6 @@ class _RegisterState extends State<Register> {
     //a.아이디 중복 체크
     List<dynamic> checkList = await handler.idCheck(checkId);
     // print(checkList[0].runtimeType);
-    print(checkList[0]);
     if (checkList[0] == 1) {
       _showDialogIdNo();
     } else {

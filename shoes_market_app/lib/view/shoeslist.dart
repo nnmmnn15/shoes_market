@@ -34,7 +34,7 @@ class _ShoeslistState extends State<Shoeslist> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    width: 60,
+                    width: MediaQuery.of(context).size.width/7,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -51,13 +51,13 @@ class _ShoeslistState extends State<Shoeslist> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      width: 70,
+                      width: MediaQuery.of(context).size.width/6,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
                           ),
                           onPressed: () {
-                            keyword = '나이키';
+                            keyword = 'nike';
                             setState(() {});
                           },
                           child: const Text('나이키')),
@@ -67,13 +67,13 @@ class _ShoeslistState extends State<Shoeslist> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    width: 70,
+                    width: MediaQuery.of(context).size.width/6,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
                         ),
                         onPressed: () {
-                          keyword = '아디다스';
+                          keyword = 'adidas';
                           setState(() {});
                         },
                         child: const Text('아디다스')),
@@ -84,13 +84,13 @@ class _ShoeslistState extends State<Shoeslist> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      width: 70,
+                      width: MediaQuery.of(context).size.width/6,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.zero,
                           ),
                           onPressed: () {
-                            keyword = '뉴발란스';
+                            keyword = 'newbalance';
                             setState(() {});
                           },
                           child: const Text('뉴발란스')),
@@ -100,7 +100,7 @@ class _ShoeslistState extends State<Shoeslist> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    width: 70,
+                    width: MediaQuery.of(context).size.width/6,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -159,9 +159,11 @@ class _ShoeslistState extends State<Shoeslist> {
                                         child: Column(
                                           children: [
                                             SizedBox(
+                                              width: MediaQuery.of(context).size.width/2,
                                                 height: 80,
                                                 child: Image.memory(
-                                                    snapshot.data![index].image)),
+                                                    snapshot.data![index].image,
+                                                    fit:BoxFit.cover ,)),
                                           ],
                                         ),
                                       ),
@@ -170,6 +172,7 @@ class _ShoeslistState extends State<Shoeslist> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           snapshot.data![index].name,

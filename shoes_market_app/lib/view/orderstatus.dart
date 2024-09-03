@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shoes_market_app/model/transport.dart';
 import 'package:shoes_market_app/vm/purchase_handler.dart';
-import 'package:shoes_market_app/vm/transport_handler.dart';
 
 class Orderstatus extends StatefulWidget {
   const Orderstatus({super.key});
@@ -85,7 +83,7 @@ class _OrderstatusState extends State<Orderstatus> {
       body: Center(
         child: Column(
           children: [
-            Text('주문 상태'),
+            const Text('주문 상태'),
             FutureBuilder(
               future: purchaseHandler.queryPurchasedetail(purchaseId),
               builder: (context, snapshot) {
@@ -120,7 +118,7 @@ class _OrderstatusState extends State<Orderstatus> {
                 }
               },
             ),
-            Text('상품 주문 상태'),
+            const Text('상품 주문 상태'),
             FutureBuilder(
               future: purchaseHandler.queryTransport(purchaseId),
               builder: (context, snapshot) {
@@ -130,29 +128,29 @@ class _OrderstatusState extends State<Orderstatus> {
                       children: [
                         Row(
                           children: [
-                            Text('접수    '),
+                            const Text('접수    '),
                             snapshot.data!.length >= 1
                                 ? Text(snapshot
                                     .data![snapshot.data!.length - 1].date)
-                                : Text('')
+                                : const Text('')
                           ],
                         ),
                         Row(
                           children: [
-                            Text('운송출발    '),
+                            const Text('운송출발    '),
                             snapshot.data!.length >= 2
                                 ? Text(snapshot
                                     .data![snapshot.data!.length - 1].date)
-                                : Text(''),
+                                : const Text(''),
                           ],
                         ),
                         Row(
                           children: [
-                            Text('매장입고    '),
+                            const Text('매장입고    '),
                             snapshot.data!.length >= 3
                                 ? Text(snapshot
                                     .data![snapshot.data!.length - 1].date)
-                                : Text('')
+                                : const Text('')
                           ],
                         ),
                       ],

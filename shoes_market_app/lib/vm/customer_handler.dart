@@ -79,7 +79,7 @@ class CustomerHandler {
     int query = 1;
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery("""
-        select * from customer where seq = '${query}'
+        select * from customer where seq = '$query'
       """);
     return queryResult
         .map(

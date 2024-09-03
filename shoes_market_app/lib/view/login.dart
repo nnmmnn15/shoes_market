@@ -42,10 +42,10 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child:
-                      SizedBox(width: 270, child: Image.asset('images/abcd.png')),
+                      SizedBox(width: MediaQuery.of(context).size.width/1.5, child: Image.asset('images/abcd.png')),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                   child: TextField(
                     keyboardType: TextInputType.text,
                     controller: idController,
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                   child: TextField(
                     obscureText: true,
                     keyboardType: TextInputType.text,
@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 30, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [

@@ -105,7 +105,6 @@ class _OrderState extends State<Order> {
                   }).toList(),
                   onChanged: (value) {
                     dropdownValue = value!;
-                    print(value);
                     setState(() {});
                   },
                 ),
@@ -113,8 +112,7 @@ class _OrderState extends State<Order> {
             ],
           ),
           SizedBox(
-            // width: 500,
-            // height: 500,
+            width: MediaQuery.of(context).size.width/1,
             child: FutureBuilder(
               future: purchaseHandler.queryPurchase(dropdownValue),
               builder: (context, snapshot) {

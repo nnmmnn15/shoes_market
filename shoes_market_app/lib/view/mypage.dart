@@ -39,10 +39,10 @@ class _MypageState extends State<Mypage> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,30,0,0),
+                          padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                           child: Container(
                             height: 130,
-                            width: 350,
+                            width: MediaQuery.of(context).size.width / 1,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               color: Colors.grey[200],
@@ -50,9 +50,11 @@ class _MypageState extends State<Mypage> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 15, 0, 0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '이름: ${snapshot.data![0].name}',
@@ -81,7 +83,7 @@ class _MypageState extends State<Mypage> {
                           padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                           child: SizedBox(
                             height: 350,
-                            width: 350,
+                            width: MediaQuery.of(context).size.width / 1,
                             child: Padding(
                               padding: const EdgeInsets.all(20),
                               child: Column(
@@ -93,13 +95,12 @@ class _MypageState extends State<Mypage> {
                                               BorderSide(color: Colors.black)),
                                     ),
                                     height: 70,
-                                    width: 300,
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.3,
                                     child: TextButton(
-                                      
                                       onPressed: () {
-                                        Get.to(const Order(), arguments: 
-                                          snapshot.data![0].name
-                                        );
+                                        Get.to(const Order(),
+                                            arguments: snapshot.data![0].name);
                                         //짜신 핸들러에 mySeq담아 보내서 쿼리하기
                                       },
                                       child: Row(
@@ -124,32 +125,40 @@ class _MypageState extends State<Mypage> {
                                                 color: Colors.black)),
                                       ),
                                       height: 70,
-                                      width: 300,
+                                      width: MediaQuery.of(context).size.width/1.3,
+
                                       child: TextButton(
                                         onPressed: () {
-                                          Get.defaultDialog(                           
+                                          Get.defaultDialog(
                                             radius: 10,
                                             title: '로그아웃',
                                             middleText: '로그아웃 하시겠습니까?.',
                                             backgroundColor: Colors.white,
                                             barrierDismissible: false,
-                                            actions: [   
+                                            actions: [
                                               Row(
                                                 children: [
                                                   SizedBox(
-                                                    width: 130,
+                                                    width: MediaQuery.of(context).size.width/3,
                                                     child: TextButton(
-                                                      onPressed: () => Get.back(), 
-                                                      style: TextButton.styleFrom(
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                                                        foregroundColor: Colors.black,
-                                                        backgroundColor: Colors.brown[50]
-                                                      ),
-                                                      child: const Text('아니오')
-                                                    ),
+                                                        onPressed: () =>
+                                                            Get.back(),
+                                                        style: TextButton.styleFrom(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            0)),
+                                                            foregroundColor:
+                                                                Colors.black,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .brown[50]),
+                                                        child:
+                                                            const Text('아니오')),
                                                   ),
                                                   SizedBox(
-                                                    width: 130,
+                                                    width: MediaQuery.of(context).size.width/3,
                                                     child: TextButton(
                                                       onPressed: () {
                                                         Get.back();
@@ -158,10 +167,16 @@ class _MypageState extends State<Mypage> {
                                                         );
                                                       },
                                                       style: TextButton.styleFrom(
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                                                        foregroundColor: Colors.white,
-                                                        backgroundColor: Colors.brown[300]
-                                                      ),
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          0)),
+                                                          foregroundColor:
+                                                              Colors.white,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .brown[300]),
                                                       child: const Text('예'),
                                                     ),
                                                   ),
@@ -172,7 +187,7 @@ class _MypageState extends State<Mypage> {
                                         },
                                         child: const Row(
                                           children: [
-                                              Text(
+                                            Text(
                                               '로그아웃',
                                               style: TextStyle(
                                                 fontSize: 20,

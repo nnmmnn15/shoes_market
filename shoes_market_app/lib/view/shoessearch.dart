@@ -105,16 +105,18 @@ class _ShoessearchState extends State<Shoessearch> {
                                       children: [
                                         Container(
                                           height: 105,
-                                          color: Colors.grey[200],
+                                          color: const Color.fromARGB(0, 238, 238, 238),
                                           child: GestureDetector(
                                             onTap: () {},
                                             child: Card(
                                               child: Column(
                                                 children: [
                                                   SizedBox(
+                                                      width: MediaQuery.of(context).size.width/2,
                                                       height: 80,
                                                       child: Image.memory(snapshot
-                                                          .data![index].image)),
+                                                          .data![index].image,
+                                                          fit: BoxFit.cover,)),
                                                 ],
                                               ),
                                             ),
