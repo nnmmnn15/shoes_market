@@ -38,15 +38,15 @@ class _RegisterState extends State<Register> {
       body: SingleChildScrollView(
         child: Center(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width/ 1.2,
+            width: MediaQuery.of(context).size.width / 1.2,
             child: Column(
               children: [
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(7,0,0,0),
+                      padding: const EdgeInsets.fromLTRB(7, 0, 0, 0),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width/1.8,
+                        width: MediaQuery.of(context).size.width / 1.8,
                         child: TextField(
                           controller: idController,
                           decoration: const InputDecoration(labelText: '아이디'),
@@ -54,7 +54,7 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(5,0,0,0),
+                      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                       child: ElevatedButton(
                         onPressed: () => idSameCheck(idController.text.trim()),
                         style: ElevatedButton.styleFrom(
@@ -71,18 +71,18 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    controller: passwordController1,
-                    decoration: const InputDecoration(labelText: '비밀번호'),
-                    obscureText: true //비번 ****
-                  ),
+                      controller: passwordController1,
+                      decoration: const InputDecoration(labelText: '비밀번호'),
+                      obscureText: true //비번 ****
+                      ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    controller: passwordController2,
-                    decoration: const InputDecoration(labelText: '비밀번호 확인'),
-                    obscureText: true //비번 ****
-                  ),
+                      controller: passwordController2,
+                      decoration: const InputDecoration(labelText: '비밀번호 확인'),
+                      obscureText: true //비번 ****
+                      ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -122,21 +122,26 @@ class _RegisterState extends State<Register> {
 //---function---
 
   idSameCheck(String checkId) async {
-    //a.아이디 중복 체크
-    List<dynamic> checkList = await handler.idCheck(checkId);
-    // print(checkList[0].runtimeType);
-    if (checkList[0] == 1) {
-      _showDialogIdNo();
+    if (checkId.isEmpty) {
+      _showDialogCheck('아이디 확인', '아이디를 입력해주세요.');
     } else {
-      _showDialogIdOk();
+      //a.아이디 중복 체크
+      List<dynamic> checkList = await handler.idCheck(checkId);
+      // print(checkList[0].runtimeType);
+      if (checkList[0] == 1) {
+        _showDialogCheck('아이디 확인', '사용 불가한 아이디입니다.');
+      } else {
+        _showDialogCheck('아이디 확인', '사용 가능한 아이디입니다.');
+      }
     }
   }
 
-  _showDialogIdNo() {
+  // String 으로 체크
+  _showDialogCheck(String title, String middleText) {
     //a-1 이미사용중인아이디
     Get.defaultDialog(
-        title: '아이디 확인',
-        middleText: '사용 불가한 아이디입니다.',
+        title: title,
+        middleText: middleText, //'사용 불가한 아이디입니다.',
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         barrierDismissible: false,
         actions: [
@@ -149,35 +154,44 @@ class _RegisterState extends State<Register> {
         ]);
   }
 
-  _showDialogIdOk() {
-    //a-2 사용가능한아이디
-    Get.defaultDialog(
-        title: '아이디 확인.',
-        middleText: '사용 가능한 아이디입니다.',
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        barrierDismissible: false,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: const Text('확인'),
-          )
-        ]);
-  }
+  // _showDialogIdOk(bool check) {
+  //   //a-2 사용가능한아이디
+  //   Get.defaultDialog(
+  //       title: '아이디 확인.',
+  //       middleText: check ? '사용 불가한 아이디입니다.' : '사용 가능한 아이디입니다.',
+  //       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+  //       barrierDismissible: false,
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () {
+  //             Get.back();
+  //           },
+  //           child: const Text('확인'),
+  //         )
+  //       ]);
+  // }
 
   joinClick(String checkId) async {
     //b. 회원가입 버튼 클릭
-    List<dynamic> checkList = await handler.idCheck(checkId);
-    if (checkList[0] == 0) {
-      if (passwordController1.text.trim() == passwordController2.text.trim()) {
-        insertCustomer();
-        _showDialogPasswordOk();
-      } else {
-        _showDialogPasswordNo();
-      }
+    if (idController.text.trim().isEmpty ||
+        passwordController1.text.trim().isEmpty ||
+        passwordController2.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty ||
+        phoneController.text.trim().isEmpty) {
+      _showDialogCheck('경고', '빈칸을 채워주세요');
     } else {
-      _showDialogIdNo();
+      List<dynamic> checkList = await handler.idCheck(checkId);
+      if (checkList[0] == 0) {
+        if (passwordController1.text.trim() ==
+            passwordController2.text.trim()) {
+          insertCustomer();
+          _showDialogPasswordOk();
+        } else {
+          _showDialogPasswordNo();
+        }
+      } else {
+        _showDialogCheck('아이디 확인', '사용 불가한 아이디입니다.');
+      }
     }
   }
 
@@ -196,21 +210,21 @@ class _RegisterState extends State<Register> {
   _showDialogPasswordOk() {
     //가입ok 환영창
     Get.defaultDialog(
-        title: '환영합니다.',
-        middleText: '회원가입이 완료되었습니다.',
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        barrierDismissible: false,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-              Get.back();
-              Get.back();
-            },
-            child: const Text('확인'),
-          ),
-        ],
-      );
+      title: '환영합니다.',
+      middleText: '회원가입이 완료되었습니다.',
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      barrierDismissible: false,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+            Get.back();
+            Get.back();
+          },
+          child: const Text('확인'),
+        ),
+      ],
+    );
   }
 
   _showDialogPasswordNo() {
@@ -223,7 +237,6 @@ class _RegisterState extends State<Register> {
         actions: [
           TextButton(
             onPressed: () {
-              Get.back();
               Get.back();
             },
             child: const Text('확인'),

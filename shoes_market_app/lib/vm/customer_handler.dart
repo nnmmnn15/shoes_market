@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import 'package:shoes_market_app/model/customer.dart';
 import 'package:shoes_market_app/vm/database_handler.dart';
@@ -5,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 class CustomerHandler {
   DatabaseHandler handler = DatabaseHandler();
+  final GetStorage box = GetStorage();
 
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
@@ -76,10 +78,10 @@ class CustomerHandler {
   }
 
   Future<List<Customer>> queryCustomer() async {
-    int query = 1;
+    int query = box.read('abcd_user_seq');
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery("""
-        select * from customer where seq = '$query'
+        select * from customer where seq = $query
       """);
     return queryResult
         .map(

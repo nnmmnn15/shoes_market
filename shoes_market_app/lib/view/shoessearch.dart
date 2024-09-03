@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shoes_market_app/view/purchase_detail.dart';
 import 'package:shoes_market_app/vm/database_handler.dart';
 
 class Shoessearch extends StatefulWidget {
@@ -105,18 +107,33 @@ class _ShoessearchState extends State<Shoessearch> {
                                       children: [
                                         Container(
                                           height: 105,
-                                          color: const Color.fromARGB(0, 238, 238, 238),
+                                          color: const Color.fromARGB(
+                                              0, 238, 238, 238),
                                           child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              Get.to(const PurchaseDetail(),
+                                                  arguments: [
+                                                    snapshot.data![index].id,
+                                                    snapshot.data![index].name,
+                                                    snapshot.data![index].price,
+                                                    snapshot.data![index].image,
+                                                  ]);
+                                            },
                                             child: Card(
                                               child: Column(
                                                 children: [
                                                   SizedBox(
-                                                      width: MediaQuery.of(context).size.width/2,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
                                                       height: 80,
-                                                      child: Image.memory(snapshot
-                                                          .data![index].image,
-                                                          fit: BoxFit.cover,)),
+                                                      child: Image.memory(
+                                                        snapshot
+                                                            .data![index].image,
+                                                        fit: BoxFit.cover,
+                                                      )),
                                                 ],
                                               ),
                                             ),
@@ -130,7 +147,8 @@ class _ShoessearchState extends State<Shoessearch> {
                                                 snapshot.data![index].name,
                                                 style: const TextStyle(
                                                     fontSize: 18,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Text(
                                                   '₩ ${snapshot.data![index].price}'),
