@@ -89,6 +89,7 @@ class DatabaseHandler {
         idSeq = res['seq'];
       },
     ).toList();
+    // [0, 1] 에러, [1, 1] 정상
     return [idCheck, idSeq];
   }
 
@@ -132,6 +133,7 @@ class DatabaseHandler {
         .toList();
   }
 
+  // 수령 데이터 입력
   Future<void> insertReceiveStatus(String receive) async {
     final Database db = await initializeDB();
 

@@ -99,6 +99,7 @@ class _OrderNumbrState extends State<OrderNumbr> {
   }
 
   // ---Functions---
+  // 키보드 함수
   keyboard() {
     return Column(
       children: [
@@ -109,7 +110,8 @@ class _OrderNumbrState extends State<OrderNumbr> {
       ],
     );
   }
-
+  
+  // 버튼 생성 함수
   buildButtonRow(List<String> buttons) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -132,6 +134,7 @@ class _OrderNumbrState extends State<OrderNumbr> {
     );
   }
 
+  // 버튼 누를때 동작 함수
   buttonPressed(String button) {
     if (button == '모두\n지우기') {
       numController.text = '';

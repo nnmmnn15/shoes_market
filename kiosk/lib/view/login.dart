@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
   // late FocusNode pwFocus;
 
   late int controllerNum;
-  late bool upperLower; // 대문자 true
+  late bool upperLower; // 대문자 키보드 = true
   late bool specialChar; // 특수문자 키보드 = true,
 
   late DatabaseHandler handler;
@@ -56,6 +56,7 @@ class _LoginState extends State<Login> {
                 'images/abcd.png',
                 width: 300,
               ),
+              // 로그인 입력란
               SizedBox(
                 width: 300,
                 child: Column(
@@ -153,6 +154,7 @@ class _LoginState extends State<Login> {
   }
 
   // --- Functions ---
+  // 키보드 함수
   keyboard() {
     return Column(
       children: [
@@ -227,8 +229,8 @@ class _LoginState extends State<Login> {
     );
   }
 
+  // 버튼 생성 함수 []의 값을 사용해 길이 만큼 생성
   buildButtonRow(List<String> buttons) {
-
     return SizedBox(
       width: MediaQuery.of(context).size.width/1,
       child: Row(
@@ -253,6 +255,7 @@ class _LoginState extends State<Login> {
     );
   }
 
+  // 버튼 누를 때 조건
   buttonPressed(String button) {
     if (controllerNum == 1) {
       if (button == 'del') {
