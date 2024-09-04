@@ -42,6 +42,7 @@ class _OrderNumbrState extends State<OrderNumbr> {
                 children: [
                   TextField(
                     controller: numController,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       labelText: '주문번호',
                     ),

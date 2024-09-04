@@ -15,8 +15,8 @@ class _LoginState extends State<Login> {
   // Property
   late TextEditingController idController;
   late TextEditingController pwController;
-  late FocusNode idFocus;
-  late FocusNode pwFocus;
+  // late FocusNode idFocus;
+  // late FocusNode pwFocus;
 
   late int controllerNum;
   late bool upperLower; // 대문자 true
@@ -31,8 +31,8 @@ class _LoginState extends State<Login> {
     super.initState();
     idController = TextEditingController();
     pwController = TextEditingController();
-    idFocus = FocusNode();
-    pwFocus = FocusNode();
+    // idFocus = FocusNode();
+    // pwFocus = FocusNode();
     controllerNum = 0;
     upperLower = false;
     specialChar = false;
@@ -64,14 +64,14 @@ class _LoginState extends State<Login> {
                       children: [
                         TextField(
                           controller: idController,
-                          focusNode: idFocus,
+                          // focusNode: idFocus,
                           decoration: const InputDecoration(
                             labelText: '아이디',
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
-                            FocusScope.of(context).requestFocus(idFocus);
+                            // FocusScope.of(context).requestFocus(idFocus);
                             controllerNum = 1;
                             setState(() {});
                           },
@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
                       children: [
                         TextField(
                           controller: pwController,
-                          focusNode: pwFocus,
+                          // focusNode: pwFocus,
                           obscureText: true,
                           decoration: const InputDecoration(
                             labelText: '비밀번호',
@@ -95,7 +95,7 @@ class _LoginState extends State<Login> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            FocusScope.of(context).requestFocus(pwFocus);
+                            // FocusScope.of(context).requestFocus(pwFocus);
                             controllerNum = 2;
                             setState(() {});
                           },

@@ -156,7 +156,7 @@ class _OrderState extends State<Order> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                              padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -167,7 +167,7 @@ class _OrderState extends State<Order> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
+                                              padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [

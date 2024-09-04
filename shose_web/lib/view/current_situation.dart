@@ -118,7 +118,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  Get.to(() => const SalesChart());
+                                  Get.to(() => const SalesChart())?.then((value) => setState(() {}),);
                                 },
                                 icon: const Icon(Icons.arrow_forward)),
                           ],
@@ -192,7 +192,7 @@ class _CurrentSituationState extends State<CurrentSituation> {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  Get.to(() => const SalesChart()); //차트
+                                  Get.to(() => const SalesChart())?.then((value) => setState(() {}),); //차트
                                 },
                                 icon: const Icon(Icons.arrow_forward)),
                           ],

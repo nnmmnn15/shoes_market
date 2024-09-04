@@ -28,6 +28,7 @@ class _ShoessearchState extends State<Shoessearch> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
           children: [
             Row(
